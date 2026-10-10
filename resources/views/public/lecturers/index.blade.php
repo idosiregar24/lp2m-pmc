@@ -92,6 +92,70 @@
         </div>
     </section>
 
+    {{-- Statistics & Analytics Charts (Preskool ERP Statistics Section) --}}
+    <section class="grid gap-4 lg:grid-cols-3" aria-label="Grafik Statistik LPPM">
+        <div class="rounded-xl border border-line bg-surface p-5 shadow-2xs lg:col-span-2">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+                <div>
+                    <h2 class="text-sm font-bold text-ink">Tren Kinerja Tridharma LPPM</h2>
+                    <p class="text-xs text-muted">Statistik data terverifikasi 5 tahun terakhir ({{ $chart['labels'][0] }}–{{ $year }})</p>
+                </div>
+                <span class="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700 border border-brand-200">
+                    <x-heroicon-o-chart-bar class="size-3.5" />
+                    5 Tahun Terakhir
+                </span>
+            </div>
+            <div x-data="barChart(@js($chart))" class="mt-4 h-64">
+                <canvas x-ref="canvas" role="img" aria-label="Grafik perbandingan capaian per tahun untuk seluruh modul luaran"></canvas>
+            </div>
+            <details class="mt-3 text-xs">
+                <summary class="cursor-pointer font-medium text-muted hover:text-ink">Lihat rincian tabel per tahun</summary>
+                <div class="mt-2 overflow-x-auto rounded-lg border border-line">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-canvas border-b border-line text-muted">
+                            <tr>
+                                <th class="px-3 py-2 font-semibold">Modul Luaran</th>
+                                @foreach ($chart['labels'] as $label)
+                                    <th class="px-3 py-2 text-right font-semibold">{{ $label }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-line">
+                            @foreach ($chart['series'] as $series)
+                                <tr class="hover:bg-canvas/50">
+                                    <td class="px-3 py-2 font-medium text-ink">{{ $series['label'] }}</td>
+                                    @foreach ($series['data'] as $val)
+                                        <td class="px-3 py-2 text-right tabular-nums text-muted">{{ $val }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+
+        <div class="rounded-xl border border-line bg-surface p-5 shadow-2xs flex flex-col justify-between">
+            <div class="border-b border-line pb-3">
+                <h2 class="text-sm font-bold text-ink">Komposisi Luaran Terverifikasi</h2>
+                <p class="text-xs text-muted">Distribusi total {{ $totalOutputs }} karya ilmiah &amp; pengabdian</p>
+            </div>
+            @if ($totalOutputs > 0)
+                <div x-data="donutChart(@js($composition))" class="my-auto h-64 py-2">
+                    <canvas x-ref="canvas" role="img" aria-label="Grafik persentase komposisi luaran LPPM"></canvas>
+                </div>
+            @else
+                <div class="my-auto flex h-64 items-center justify-center text-xs text-muted">
+                    Belum ada data terverifikasi.
+                </div>
+            @endif
+            <div class="border-t border-line pt-3 flex items-center justify-between text-xs text-muted">
+                <span>Total Luaran Resmi</span>
+                <span class="font-bold text-ink tabular-nums">{{ $totalOutputs }} Dokumen</span>
+            </div>
+        </div>
+    </section>
+
     {{-- Filter & Search Panel (Preskool Form Toolbar Style) --}}
     <section class="rounded-xl border border-line bg-surface shadow-2xs">
         <div class="flex items-center justify-between border-b border-line px-5 py-3.5">

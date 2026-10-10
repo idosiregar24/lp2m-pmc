@@ -47,6 +47,34 @@ class PublicLecturerController extends Controller
         $stats = collect(Verifiable::MODULES)->map(fn (array $m) => $m['model']::query()->verified()->count());
         $totalLecturers = $this->lecturers()->count();
 
+        $year = now()->year;
+        $chartYears = range($year - 4, $year);
+
+        $chartSeries = collect(Verifiable::MODULES)->map(function (array $module) use ($chartYears) {
+            $perYear = $module['model']::query()
+                ->verified()
+                ->whereIn('year', $chartYears)
+                ->groupBy('year')
+                ->selectRaw('year, count(*) as total')
+                ->pluck('total', 'year')
+                ->map(fn ($total) => (int) $total);
+
+            return [
+                'label' => $module['label'],
+                'data' => array_map(fn (int $chartYear) => $perYear[$chartYear] ?? 0, $chartYears),
+            ];
+        })->values()->all();
+
+        $chart = [
+            'labels' => array_map('strval', $chartYears),
+            'series' => $chartSeries,
+        ];
+
+        $composition = [
+            'labels' => collect(Verifiable::MODULES)->pluck('label')->values()->all(),
+            'data' => $stats->values()->all(),
+        ];
+
         return view('public.lecturers.index', [
             'lecturers' => $lecturers,
             'rows' => $reports->rows($lecturers->items(), [])->keyBy(fn (array $row) => $row['user']->id),
@@ -57,6 +85,9 @@ class PublicLecturerController extends Controller
             'stats' => $stats,
             'totalLecturers' => $totalLecturers,
             'totalOutputs' => $stats->sum(),
+            'chart' => $chart,
+            'composition' => $composition,
+            'year' => $year,
         ]);
     }
 
@@ -91,6 +122,35 @@ class PublicLecturerController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $year = now()->year;
+        $chartYears = range($year - 4, $year);
+
+        $lecturerSeries = collect(Verifiable::MODULES)->map(function (array $m) use ($lecturer, $chartYears) {
+            $perYear = $m['model']::query()
+                ->verified()
+                ->filterByLecturer($lecturer->id)
+                ->whereIn('year', $chartYears)
+                ->groupBy('year')
+                ->selectRaw('year, count(*) as total')
+                ->pluck('total', 'year')
+                ->map(fn ($total) => (int) $total);
+
+            return [
+                'label' => $m['label'],
+                'data' => array_map(fn (int $chartYear) => $perYear[$chartYear] ?? 0, $chartYears),
+            ];
+        })->values()->all();
+
+        $lecturerChart = [
+            'labels' => array_map('strval', $chartYears),
+            'series' => $lecturerSeries,
+        ];
+
+        $lecturerComposition = [
+            'labels' => collect(Verifiable::MODULES)->pluck('label')->values()->all(),
+            'data' => array_values($counts),
+        ];
+
         return view('public.lecturers.show', [
             'lecturer' => $lecturer,
             'counts' => $counts,
@@ -101,6 +161,9 @@ class PublicLecturerController extends Controller
             'records' => $records,
             'filters' => $filters,
             'years' => ValidYear::options(),
+            'chart' => $lecturerChart,
+            'composition' => $lecturerComposition,
+            'year' => $year,
         ]);
     }
 

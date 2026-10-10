@@ -120,3 +120,26 @@ it('searches and filters records inside a lecturer detail page by keyword and ro
         ->assertSee('Analisis Kebijakan Kesehatan')
         ->assertDontSee('Studi Efektivitas Vaksin PMC');
 });
+
+it('provides charts data on public index and lecturer detail', function () {
+    $lecturer = dosen(['name' => 'Dr. Grafika']);
+    Research::factory()->verified()->withContributors()->create([
+        'created_by' => $lecturer->id,
+        'year' => now()->year,
+    ]);
+
+    $indexRes = $this->get(route('public.lecturers.index'))
+        ->assertOk()
+        ->assertViewHas(['chart', 'composition']);
+
+    expect($indexRes->viewData('chart')['series'])->toBeArray()
+        ->and($indexRes->viewData('composition')['data'])->toBeArray();
+
+    $showRes = $this->get(route('public.lecturers.show', $lecturer))
+        ->assertOk()
+        ->assertViewHas(['chart', 'composition']);
+
+    expect($showRes->viewData('chart')['series'])->toBeArray()
+        ->and($showRes->viewData('composition')['data'])->toBeArray();
+});
+

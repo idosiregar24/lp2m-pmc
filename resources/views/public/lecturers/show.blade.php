@@ -83,6 +83,41 @@
         </div>
     </section>
 
+    {{-- Lecturer Personal Analytics (Preskool Performance Charts) --}}
+    @if ($totalCounts > 0)
+        <section class="grid gap-4 lg:grid-cols-3" aria-label="Statistik Kinerja Dosen">
+            <div class="rounded-xl border border-line bg-surface p-5 shadow-2xs lg:col-span-2">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+                    <div>
+                        <h2 class="text-sm font-bold text-ink">Tren Kinerja {{ $lecturer->name }}</h2>
+                        <p class="text-xs text-muted">Statistik data terverifikasi 5 tahun terakhir ({{ $chart['labels'][0] }}–{{ $year }})</p>
+                    </div>
+                    <span class="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700 border border-brand-200">
+                        <x-heroicon-o-chart-bar class="size-3.5" />
+                        5 Tahun Terakhir
+                    </span>
+                </div>
+                <div x-data="barChart(@js($chart))" class="mt-4 h-56">
+                    <canvas x-ref="canvas" role="img" aria-label="Grafik perbandingan capaian per tahun dosen"></canvas>
+                </div>
+            </div>
+
+            <div class="rounded-xl border border-line bg-surface p-5 shadow-2xs flex flex-col justify-between">
+                <div class="border-b border-line pb-3">
+                    <h2 class="text-sm font-bold text-ink">Distribusi Tridharma Dosen</h2>
+                    <p class="text-xs text-muted">Proporsi seluruh karya terverifikasi</p>
+                </div>
+                <div x-data="donutChart(@js($composition))" class="my-auto h-56 py-2">
+                    <canvas x-ref="canvas" role="img" aria-label="Grafik proporsi kategori karya dosen"></canvas>
+                </div>
+                <div class="border-t border-line pt-3 flex items-center justify-between text-xs text-muted">
+                    <span>Total Capaian</span>
+                    <span class="font-bold text-ink tabular-nums">{{ $totalCounts }} Karya</span>
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- Module Tabs & Filter Toolbar --}}
     <section class="space-y-4">
         {{-- Module Tabs (Preskool Clean Underline Tabs) --}}
