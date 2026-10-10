@@ -98,6 +98,15 @@ dosen yang sama dua kali.
   `settings.logo_path`; logo lama dihapus saat diganti. `storage:link`
   hanya untuk ini — dokumen pendukung tetap di disk `local`.
 
+## 4b. Portal publik (`/publik`, tanpa login — PRD §4.13)
+
+- Query sendiri (bukan `visibleTo`): selalu `->verified()` +
+  `filterByLecturer`, dosen = `role DOSEN` **dan** `is_active`; admin /
+  nonaktif / id asing → 404.
+- Tidak menampilkan NIDN/NUPTK, dokumen (tidak ada tautan `documents.*`),
+  status, pembuat, verifikator, catatan revisi.
+- `throttle:60,1`; filter lewat `Controller::filters()` (string saja).
+
 ## 5. Output & ekspor
 
 - Blade `{{ }}` saja untuk data user.

@@ -12,11 +12,11 @@ Baca saat akan menulis/menyentuh tampilan.
 ## Sebelum menulis markup
 
 1. **Buka `resources/css/app.css`**, bukan mengandalkan ingatan — lihat
-   token yang benar-benar ada (`brand-*` merah poster, `gold-*` emas
-   poster, `navy-*` biru poster, `canvas`, `surface`, `ink`, `muted`,
-   `line`, status + `*-ink`). Merah pekat hanya di sidebar, login, dan
-   tombol primer; emas hanya di atas merah/gelap (teks emas di atas putih
-   pakai `gold-800`).
+   token yang benar-benar ada (`brand-*` merah PMC untuk aksi & penanda
+   aktif, `gold-*` aksen, `navy-*` info, `primary-*` abu netral untuk hover,
+   `canvas`, `surface`, `ink`, `muted`, `line`, status
+   `{success,warning,danger,info,accent}` + `-soft`/`-line`/`-ink`). Layout
+   modern putih, merah hanya sebagai aksen; lihat `rules/design-standards.md`.
 2. **Jangan pernah** hex atau warna default Tailwind. Token belum ada →
    tambahkan di `@theme`.
 3. Pilih kerangka: halaman internal → `<x-layouts.app>`; login/ganti

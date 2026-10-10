@@ -8,14 +8,14 @@ teruji (Definition of Done PRD §10), lalu perbarui tabel status di bawah.
 
 | Sprint | Isi | Status |
 |---|---|---|
-| [00](sprint-00-setup.md) | Instalasi Laravel, Tailwind v4 + token PMC, layout & komponen dasar | 🟨 Laravel terpasang; tampilan belum |
-| [01](sprint-01-auth-profil.md) | Login username, middleware, ganti password, Profil Saya | ⬜ Belum mulai |
-| [02](sprint-02-user-master.md) | Kelola User + Data Master + Pengaturan (unggah logo) | ⬜ Belum mulai |
-| [03](sprint-03-penelitian.md) | Fondasi bersama (anggota, dokumen, **verifikasi**, Policy, filter) + **Penelitian** (modul acuan) | ⬜ Belum mulai |
-| [04](sprint-04-pengabdian.md) | Pengabdian kepada Masyarakat | ⬜ Belum mulai |
-| [05](sprint-05-publikasi-buku.md) | Publikasi + Buku | ⬜ Belum mulai |
-| [06](sprint-06-hki.md) | HKI | ⬜ Belum mulai |
-| [07](sprint-07-dashboard-rekap.md) | Dashboard, Rekap, Ekspor Excel, hardening & UAT | ⬜ Belum mulai |
+| [00](sprint-00-setup.md) | Instalasi Laravel, Tailwind v4 + token PMC, layout & komponen dasar | ✅ Selesai |
+| [01](sprint-01-auth-profil.md) | Login username, middleware, ganti password, Profil Saya | ✅ Selesai |
+| [02](sprint-02-user-master.md) | Kelola User + Data Master + Pengaturan (unggah logo) | ✅ Selesai |
+| [03](sprint-03-penelitian.md) | Fondasi bersama (anggota, dokumen, **verifikasi**, Policy, filter) + **Penelitian** (modul acuan) | ✅ Selesai |
+| [04](sprint-04-pengabdian.md) | Pengabdian kepada Masyarakat | ✅ Selesai |
+| [05](sprint-05-publikasi-buku.md) | Publikasi + Buku | ✅ Selesai |
+| [06](sprint-06-hki.md) | HKI | ✅ Selesai |
+| [07](sprint-07-dashboard-rekap.md) | Dashboard, Rekap, Ekspor Excel, hardening & UAT | 🟨 Tinggal UAT & ukur coverage |
 
 Legenda: ⬜ belum · 🟨 berjalan · ✅ selesai.
 
@@ -55,8 +55,54 @@ Repo `https://github.com/idosiregar24/bp2m-pmc` (branch `main`). User yang
 melakukan commit & push — Claude hanya menyiapkan pesan commit di akhir
 setiap pekerjaan.
 
+## Catatan implementasi Sprint 00–03 (2026-10-10)
+
+- `App\Support\Verifiable::MODULES` adalah registri modul data: morph map,
+  route verifikasi `{type}/{id}`, antrean Verifikasi, dashboard, ringkasan
+  user, dan `User::hasActivityData()` membacanya. Sprint 04–06 cukup menambah
+  satu entri di sana (+ model/policy/controller/view modulnya).
+- `Scheme::isInUse()` / `FundingSource::isInUse()` masih memeriksa
+  `researches` saja — tambahkan `community_services` di Sprint 04.
+- Navigasi otomatis aktif begitu route `index` ada (`Route::has()`), tanpa
+  edit manual.
+- Data Master memakai satu `Save{Model}Request` + satu `form.blade.php` per
+  master (form kecil, create = edit).
+- Prodi unik per (fakultas, nama, **jenjang**) — D3 dan S1 Farmasi boleh
+  sama-sama ada.
+- Tombol "Simpan & Ajukan" mengirim niat lewat hidden input `submit`
+  (`x-ref`), bukan `name/value` tombol — tombol yang di-`disabled` saat submit
+  tidak ikut terkirim.
+- Pola wajib modul berikutnya (hasil review keamanan Sprint 03):
+  - `{Model}Service::update()` memanggil
+    `VerificationService::ensureEditableByOwner()` di awal transaksi untuk
+    Dosen (cek ulang status dengan row lock).
+  - `Update{Model}Request` meng-override `currentContributorIds()` agar
+    anggota yang kini Admin/nonaktif tetap valid.
+  - Filter daftar dibaca lewat `$this->filters($request, [...])` (base
+    `Controller`), bukan `$request->only()` / `request('q')` di view.
+
+## Catatan implementasi Sprint 04–07 (2026-10-10)
+
+- Bagian yang sama di kelima modul dipindah ke kelas bersama:
+  `ActivityService` (simpan + anggota + dokumen + verifikasi),
+  `Requests\Concerns\UpdatesActivity` (authorize/kuota dokumen/anggota lama),
+  `ValidatesFunding` (skema per jenis + sumber dana), factory trait
+  `ActivityStates`, `Exports\ActivityExport` (kolom bersama + anti formula
+  injection), `Controllers\Concerns\ExportsActivity`.
+- Filter `lecturer` (anggota mana pun) di kelima daftar = tujuan klik angka
+  Rekap; tampil sebagai chip di `filter-bar`.
+- Dashboard: satu query `groupBy(year)` per modul; total, tahun berjalan
+  dan grafik 5 tahun diturunkan dari hasil itu. Rekap fakultas menghitung
+  satu data di setiap fakultas anggotanya.
+- `maatwebsite/excel` terpasang **v4** (API concern sama dengan 3.1);
+  grafik `chart.js` v4 (komponen Alpine `yearlyChart`, warna dari token CSS).
+- Coverage belum terukur: PHP lokal tidak punya PCOV/Xdebug. Pasang
+  `php_pcov` di Laragon lalu `php artisan test --coverage`.
+
 ## Catatan penyesuaian
 
 - Skema database = PRD §5 (tidak ada file SQL terpisah).
-- Warna diambil dari poster "Launching Universitas PMC" — lihat
-  `rules/design-standards.md`.
+- Tema visual 2026-10-10 (permintaan user): layout modern putih seperti
+  referensi, tetap dengan warna instansi PMC — lihat `rules/design-standards.md`.
+- Tambahan di luar sprint (2026-10-10): dashboard dibuka dengan grid grafik
+  (tren, komposisi, status) dan **portal publik** `/publik` (PRD §4.13).

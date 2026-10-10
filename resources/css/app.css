@@ -1,11 +1,111 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import 'tom-select/dist/css/tom-select.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+@source '../views';
+@source '../js';
+@source '../../app/Enums';
+@source '../../app/Support';
 
+/*
+ | Modern white layout in the Universitas PMC colours (red, gold, navy from the
+ | official poster) on neutral surfaces. The only place colours are defined —
+ | see .claude/rules/design-standards.md.
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+    /* brand = PMC red — primary actions, active markers, focus */
+    --color-brand-50: #fdf2f2;
+    --color-brand-100: #fbe2e2;
+    --color-brand-200: #f5bdbd;
+    --color-brand-500: #d11f1f;
+    --color-brand-600: #b50606; /* primary button */
+    --color-brand-700: #a50707; /* hover */
+    --color-brand-800: #7a0d0d;
+    --color-brand-900: #5c0f0f;
+    --color-brand-950: #421212;
+
+    /* gold = PMC gold — accents (logo, highlights); text on white uses gold-800 */
+    --color-gold-50: #fff8e6;
+    --color-gold-100: #ffefc7;
+    --color-gold-200: #fde3a7;
+    --color-gold-400: #ffce5f;
+    --color-gold-800: #8a5a00;
+
+    /* navy = PMC blue — secondary / info */
+    --color-navy-50: #eef3f9;
+    --color-navy-100: #dce6f2;
+    --color-navy-200: #b9cde5;
+    --color-navy-700: #1f4c82;
+    --color-navy-800: #193e6a;
+
+    /* primary = neutral greys for hovers and hairline decorations */
+    --color-primary-50: #f4f4f5;
+    --color-primary-100: #ebebed;
+    --color-primary-200: #d4d4d8;
+    --color-primary-500: #71717a;
+    --color-primary-600: #18181b; /* primary button */
+    --color-primary-700: #3f3f46; /* hover */
+    --color-primary-800: #27272a;
+    --color-primary-900: #18181b;
+    --color-primary-950: #09090b;
+
+    /* neutrals */
+    --color-canvas: #f8fafc; /* crisp Preskool-inspired app canvas */
+    --color-surface: #ffffff;
+    --color-line: #e2e8f0; /* clean modern border */
+    --color-ink: #0f172a; /* high-contrast slate ink */
+    --color-muted: #64748b; /* clean slate muted text */
+
+    /* status pills: *-soft background, *-line border, *-ink text; base = solid (charts, dots) */
+    --color-success: #16a34a;
+    --color-success-soft: #f0fdf4;
+    --color-success-line: #bbf7d0;
+    --color-success-ink: #15803d;
+    --color-warning: #eab308; /* PMC gold */
+    --color-warning-soft: #fefce8;
+    --color-warning-line: #fef08a;
+    --color-warning-ink: #854d0e;
+    --color-danger: #ef4444;
+    --color-danger-soft: #fef2f2;
+    --color-danger-line: #fecaca;
+    --color-danger-ink: #b91c1c;
+    --color-info: #12448d; /* PMC navy */
+    --color-info-soft: #eff6ff;
+    --color-info-line: #bfdbfe;
+    --color-info-ink: #1e40af;
+    --color-accent: #961a22; /* PMC red */
+    --color-accent-soft: #fef2f2;
+    --color-accent-line: #fecaca;
+    --color-accent-ink: #961a22;
+}
+
+@layer base {
+    body {
+        @apply bg-canvas text-ink antialiased;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/* Tom Select — match form inputs */
+.ts-wrapper .ts-control {
+    @apply min-h-9 rounded-lg border-line px-3 py-1.5 text-sm shadow-xs;
+}
+
+.ts-wrapper.focus .ts-control {
+    @apply border-brand-200 ring-4 ring-brand-600/10;
+}
+
+.ts-dropdown {
+    @apply mt-1 rounded-lg border-line text-sm shadow-lg;
+}
+
+.ts-dropdown .active {
+    @apply bg-canvas text-ink;
 }

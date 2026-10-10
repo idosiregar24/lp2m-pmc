@@ -88,12 +88,15 @@ Sprint-by-sprint plan with checklists and current build status:
    An Admin cannot deactivate or demote themself.
 8. **`Research` model needs `protected $table = 'researches';`** — Laravel's
    pluralizer treats "research" as uncountable.
-9. **Tailwind v4, CSS-first; colours from the Universitas PMC poster.**
-   Tokens live only in `resources/css/app.css` `@theme`: `brand-*` (poster
-   red, primary `brand-600` = `#B50606`), `gold-*` (poster gold `#FFCE5F`,
-   accent on red only), `navy-*` (poster blue `#1F4C82`, secondary). Never a
-   hex literal or default Tailwind colour (`bg-red-700`) in a view; never
-   gold text on white. See `design-standards.md`.
+9. **Tailwind v4, CSS-first; modern white layout in the PMC colours**
+   (user, 2026-10-10: modern/white like their reference, but keep the
+   institution's colours). Tokens live only in `resources/css/app.css`
+   `@theme`: `brand-*` (PMC red, primary actions/active markers,
+   `brand-600` = `#B50606`), `gold-*` (accent/logo), `navy-*` (info),
+   neutral `primary-*` greys for hovers, `canvas`/`surface`/`line`/`ink`/
+   `muted`, pastel status sets `{success,warning,danger,info,accent}` +
+   `-soft`/`-line`/`-ink`. Never a hex literal or default Tailwind colour
+   (`bg-red-700`) in a view. See `design-standards.md`.
 10. **Components before markup.** Buttons, cards, tables, fields, badges,
     flash, empty states come from `resources/views/components/{ui,form,shared,layouts}`;
     create and edit share one `_form.blade.php`.
@@ -116,7 +119,7 @@ Sprint-by-sprint plan with checklists and current build status:
     Pengaturan (`settings.edit`; PNG/JPG/WebP ≤1 MB, **no SVG**); the path
     lives in the `settings` table (`App\Support\Settings::logoUrl()`, cached)
     and is the **only** file on the `public` disk. Without a logo the layout
-    shows the placeholder (gold circle "PMC").
+    shows the placeholder (red "PMC" tile, gold text).
 
 ## Git
 
@@ -134,10 +137,11 @@ Sprint-by-sprint plan with checklists and current build status:
   `C:\Users\user\Documents\laravel\laragon-6.0-minimal\bin\php\php-8.4.12-nts-Win32-vs17-x64`
   (8.2 is also installed; make sure Laragon/PATH use 8.4). Composer 2.8,
   Node 24, **MySQL 8.0.30** (Laragon).
-- The Laravel project is **not scaffolded yet** — Sprint 0 creates it. The
-  project root already contains `.claude/`, `.git/`, `README.md` and
-  `.gitignore`, so create the skeleton in a temp folder and move it up
-  without overwriting those (see `plan/sprint-00-setup.md`).
+- Sprints 00–07 are built (all five modules, Rekap, export). Shared module
+  code: `ActivityService`, `ActivityPolicy`, `UpdatesActivity` request
+  trait, `ActivityExport`, factory trait `ActivityStates`, registry
+  `App\Support\Verifiable`. A new data module = one registry entry + its
+  own model/request/controller/views/export.
 - DB: `bp2m_pmc`, user `root`, no password.
 - App: `php artisan serve --port=8020` (8000/8010 are taken by other local
   projects) or the Laragon vhost `http://bp2m-pmc.test` (auto-created from

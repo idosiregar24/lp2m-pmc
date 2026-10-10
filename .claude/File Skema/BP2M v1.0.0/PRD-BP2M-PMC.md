@@ -120,7 +120,7 @@ Aturan:
 | Master | Field | Catatan |
 |---|---|---|
 | Fakultas | nama, kode (opsional) | |
-| Prodi | fakultas, nama, jenjang (D3/S1/S2/S3/Profesi) | |
+| Prodi | fakultas, nama, jenjang (D3/D4/S1/S2/S3/Profesi) | |
 | Skema | jenis (Penelitian / Pengabdian), nama, aktif | mis. Penelitian Dasar, Penelitian Terapan, PKM, Pemberdayaan Kemitraan Masyarakat |
 | Sumber Dana | nama, aktif | mis. Internal Universitas PMC, Hibah Kemdiktisaintek, Mandiri, Mitra/Industri |
 
@@ -241,9 +241,20 @@ Berlaku untuk kelima modul data (4.4–4.8). Status:
 ### 4.12 Pengaturan Sistem (Admin)
 - **Logo Universitas PMC** diunggah Admin dari menu Pengaturan (PNG/JPG/WebP,
   maks 1 MB, disarankan persegi ≥256px; SVG ditolak). Dipakai di sidebar,
-  halaman login, dan favicon. Belum ada logo → lambang sementara (lingkaran
-  emas bertulisan "PMC").
+  halaman login, dan favicon. Belum ada logo → lambang sementara (kotak
+  merah PMC bertulisan "PMC" emas).
 - Ganti logo menggantikan file lama (file lama dihapus).
+
+### 4.13 Portal Publik — Cari Kinerja Dosen (tanpa login)
+- `/publik`: cari dosen berdasarkan nama, filter fakultas/prodi; kartu dosen
+  berisi jumlah data **terverifikasi** per modul.
+- `/publik/dosen/{id}`: profil dosen (nama, prodi, fakultas) + tab per modul
+  berisi data terverifikasi tempat dosen itu menjadi anggota (judul, tahun,
+  ringkasan atribut, daftar anggota), filter tahun.
+- Hanya akun **DOSEN aktif**; tidak pernah menampilkan NIDN/NUPTK, dokumen,
+  data berstatus selain Terverifikasi, pembuat/verifikator, atau akun Admin.
+  Dibatasi `throttle:60,1`. Masih `noindex` (sistem internal) — buka untuk
+  mesin pencari bila BP2M menghendaki (PRD §11.2).
 
 ---
 
@@ -254,8 +265,8 @@ Semua tabel `utf8mb4`, PK `id` BIGINT auto-increment, `timestamps()`.
 ### 5.1 Master
 ```
 faculties        id, name(150) UNIQUE, code(20) NULL, is_active BOOL=1
-study_programs   id, faculty_id FK→faculties RESTRICT, name(150), level(10) [D3|S1|S2|S3|PROFESI],
-                 is_active BOOL=1, UNIQUE(faculty_id, name)
+study_programs   id, faculty_id FK→faculties RESTRICT, name(150), level(10) [D3|D4|S1|S2|S3|PROFESI],
+                 is_active BOOL=1, UNIQUE(faculty_id, name, level)
 schemes          id, type(20) [RESEARCH|COMMUNITY_SERVICE], name(150), is_active BOOL=1,
                  UNIQUE(type, name)
 funding_sources  id, name(150) UNIQUE, is_active BOOL=1
@@ -425,11 +436,12 @@ per model data kinerja; scope query `visibleTo($user)` di halaman daftar.
   - **Dashboard**
   - **Data Kinerja**: Penelitian · Pengabdian · Publikasi · Buku · HKI
   - **Administrasi** (Admin): Verifikasi (angka antrean) · Pengguna · Data Master (tab: Fakultas, Prodi, Skema, Sumber Dana) · Rekap · Pengaturan
-- Gaya sederhana. Warna diambil dari poster resmi "Launching Universitas
-  PMC": **merah `#B50606`** (primer — tombol utama, sidebar bergradasi ke
-  `#421212`), **emas `#FFCE5F`** (aksen di atas merah, garis tepi),
-  **biru `#1F4C82`** (sekunder/info), latar putih & abu hangat. Token lengkap
-  di `.claude/rules/design-standards.md`, diterapkan di
+- Gaya modern berlatar putih (keputusan user 2026-10-10) **dengan warna
+  instansi**: sidebar abu sangat muda, konten di panel putih bersudut
+  membulat, garis tipis; merah PMC `#B50606` untuk aksi utama & penanda aktif,
+  emas `#FFCE5F` untuk aksen/logo, biru `#1F4C82` untuk info; badge pastel.
+  Dashboard dibuka dengan grid grafik (tren, komposisi, status).
+  Token lengkap di `.claude/rules/design-standards.md`, diterapkan di
   `resources/css/app.css`.
 - Logo dari Pengaturan Sistem (§4.12), bukan file di repo.
 - Status verifikasi tampil sebagai badge: Draf (abu), Diajukan (biru),
@@ -473,7 +485,7 @@ Satu fitur dianggap selesai bila:
 2. **Verifikasi Admin** — ya (§4.11, §6.4).
 3. **Role Pimpinan** — tidak untuk saat ini.
 4. **Logo** — diunggah sendiri oleh BP2M lewat menu Pengaturan (§4.12).
-   Warna dari poster resmi (§8).
+   Tema: layout modern putih dengan warna instansi PMC (§8).
 5. **Daftar resmi fakultas, prodi, skema, sumber dana** — menyusul; sistem
    dibangun dengan data contoh, Admin mengisi lewat Data Master.
 

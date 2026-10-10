@@ -88,9 +88,16 @@ naikkan ke `components/shared/` saat modul kedua membutuhkannya.
 - Tombol Simpan dinonaktifkan saat submit (`x-data="{ busy: false }" @submit="busy = true"`
   + `x-bind:disabled="busy"`).
 - Form data kinerja (PRD §4.9): Dosen melihat **[Batal] [Simpan sebagai
-  Draf] [Simpan & Ajukan]** — tombol terakhir `name="submit" value="1"`
-  (primary); Admin hanya **[Batal] [Simpan]**. Tidak ada field `status`
-  di form mana pun.
+  Draf] [Simpan & Ajukan]**; Admin hanya **[Batal] [Simpan]**. Tidak ada
+  field `status` di form mana pun.
+- **Jangan** memberi tombol submit `name/value` bila tombol itu ikut
+  `x-bind:disabled="busy"` — tombol yang sudah disabled tidak mengirim
+  nilainya. Pakai hidden input + `x-ref`:
+  `<input type="hidden" name="submit" value="0" x-ref="intent">` dan
+  `x-on:click="$refs.intent.value = '1'"` di tombol (lihat `researches/_form`).
+- Filter daftar: kolom cari di slot `<x-slot:search>` milik
+  `<x-shared.filter-bar>` (selalu tampil); filter lain di slot default (dilipat
+  di HP).
 
 ## 4. Tabel & daftar
 

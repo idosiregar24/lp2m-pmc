@@ -234,7 +234,7 @@ enum PublicationLevel: string
     {
         return match ($this) {
             self::National => 'info',
-            self::International => 'brand',
+            self::International => 'accent',
         };
     }
 

@@ -5,34 +5,34 @@ menyalin bentuk Penelitian.
 
 ## Publikasi
 
-- [ ] Enum `VenueType` (Journal → "Jurnal", Proceeding → "Prosiding"),
+- [x] Enum `VenueType` (Journal → "Jurnal", Proceeding → "Prosiding"),
       `PublicationLevel` (National → "Nasional", International →
       "Internasional", `tone()`).
-- [ ] Migrasi `publications` (PRD §5.3, kolom verifikasi; model `HasVerification`).
-- [ ] Model `Publication` + factory; `scopeFilter()` (q juga mencari
+- [x] Migrasi `publications` (PRD §5.3, kolom verifikasi; model `HasVerification`).
+- [x] Model `Publication` + factory; `scopeFilter()` (q juga mencari
       `venue_name`/`publisher`, year, faculty, study_program, venue_type,
       level).
-- [ ] Form Request + `PublicationService` + `PublicationPolicy`.
-- [ ] Form: label "Nama jurnal" / "Nama prosiding" berganti mengikuti
+- [x] Form Request + `PublicationService` + `PublicationPolicy`.
+- [x] Form: label "Nama jurnal" / "Nama prosiding" berganti mengikuti
       `venue_type` (Alpine); label anggota "Penulis", baris 1 "Penulis
       pertama".
-- [ ] `PublicationController`; route `/publikasi` → `publications.*`.
-- [ ] View `publications/` (badge level & jenis wadah di tabel).
-- [ ] Navigasi: Publikasi → `publications.index`.
+- [x] `PublicationController`; route `/publikasi` → `publications.*`.
+- [x] View `publications/` (badge level & jenis wadah di tabel).
+- [x] Navigasi: Publikasi → `publications.index`.
 
 ## Buku
 
-- [ ] Migrasi `books` (PRD §5.3, kolom verifikasi; model `HasVerification`).
-- [ ] Model `Book` + factory; `scopeFilter()` (q juga mencari `publisher`,
+- [x] Migrasi `books` (PRD §5.3, kolom verifikasi; model `HasVerification`).
+- [x] Model `Book` + factory; `scopeFilter()` (q juga mencari `publisher`,
       year, faculty, study_program).
-- [ ] Form Request + `BookService` + `BookPolicy`.
-- [ ] `BookController`; route `/buku` → `books.*`.
-- [ ] View `books/` (label anggota "Penulis").
-- [ ] Navigasi: Buku → `books.index`.
+- [x] Form Request + `BookService` + `BookPolicy`.
+- [x] `BookController`; route `/buku` → `books.*`.
+- [x] View `books/` (label anggota "Penulis").
+- [x] Navigasi: Buku → `books.index`.
 
 ## Bersama
 
-- [ ] Alias `publication` & `book` di `Verifiable`; form & detail memakai tombol/panel verifikasi.
-- [ ] Detail user: jumlah publikasi & buku. `DemoDataSeeder`: 20 + 10.
-- [ ] Test lengkap kedua modul (`backend-standards.md` §6) + enum tidak
+- [x] Alias `publication` & `book` di `Verifiable`; form & detail memakai tombol/panel verifikasi.
+- [x] Detail user: jumlah publikasi & buku. `DemoDataSeeder`: 20 + 10.
+- [x] Test lengkap kedua modul (`backend-standards.md` §6) + enum tidak
       valid ditolak.

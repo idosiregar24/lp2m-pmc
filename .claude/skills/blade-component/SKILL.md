@@ -35,17 +35,17 @@ saat modul kedua membutuhkannya.
 
 ```blade
 @props([
-    'tone' => 'neutral',   // success|warning|danger|info|neutral|brand
+    'tone' => 'neutral',   // success|warning|danger|info|accent|neutral
 ])
 
 @php
     $tones = [
-        'success' => 'bg-success/10 text-success-ink',
-        'warning' => 'bg-warning/10 text-warning-ink',
-        'danger'  => 'bg-danger/10 text-danger-ink',
-        'info'    => 'bg-info/10 text-info-ink',
-        'brand'   => 'bg-brand-50 text-brand-700',
-        'neutral' => 'bg-canvas text-muted',
+        'success' => 'border-success-line bg-success-soft text-success-ink',
+        'warning' => 'border-warning-line bg-warning-soft text-warning-ink',
+        'danger'  => 'border-danger-line bg-danger-soft text-danger-ink',
+        'info'    => 'border-info-line bg-info-soft text-info-ink',
+        'accent'  => 'border-accent-line bg-accent-soft text-accent-ink',
+        'neutral' => 'border-line bg-surface text-muted',
     ];
 @endphp
 
