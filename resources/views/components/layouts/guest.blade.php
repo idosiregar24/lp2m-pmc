@@ -18,8 +18,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-canvas text-ink antialiased">
-    {{-- PMC colour strip --}}
-    <div class="fixed inset-x-0 top-0 h-1.5 bg-linear-to-r from-brand-600 via-navy-700 to-gold-400" aria-hidden="true"></div>
+    {{-- PMC brand strip --}}
+    <div class="fixed inset-x-0 top-0 h-1 bg-brand-700" aria-hidden="true"></div>
     <main class="flex min-h-screen items-center justify-center px-4 py-12">
         <div class="w-full max-w-sm">
             <div class="mb-8 flex flex-col items-center text-center">
@@ -28,7 +28,7 @@
                 <p class="mt-1 text-xs text-muted">Universitas Pekanbaru Medical Center</p>
             </div>
 
-            <div class="rounded-3xl border border-line bg-surface p-6 shadow-sm sm:p-8">
+            <div class="rounded-xl border border-line bg-surface p-6 shadow-xs sm:p-8">
                 @if ($title)
                     <h2 class="text-base font-bold text-ink">{{ $title }}</h2>
                 @endif

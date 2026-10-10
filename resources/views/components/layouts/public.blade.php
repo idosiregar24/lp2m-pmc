@@ -15,9 +15,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-canvas text-ink antialiased">
-    <div class="h-1.5 bg-linear-to-r from-brand-600 via-navy-700 to-gold-400" aria-hidden="true"></div>
+    <div class="h-1 bg-brand-700" aria-hidden="true"></div>
 
-    <header class="sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur-md shadow-xs">
+    <header class="sticky top-0 z-30 border-b border-line bg-surface shadow-xs">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
             <a href="{{ route('public.lecturers.index') }}" class="flex min-w-0 items-center gap-3 transition hover:opacity-90">
                 <x-ui.logo size="md" />

@@ -1,104 +1,111 @@
 @php($isAdmin = auth()->user()->isAdmin())
 
 <x-layouts.app title="Dashboard">
-    {{-- Preskool-inspired Profile Hero Banner & Quick Actions --}}
+    {{-- Preskool-style Profile Banner & KPI Cards --}}
     <section class="grid gap-4 lg:grid-cols-12 items-stretch">
-        <div class="relative overflow-hidden rounded-2xl border border-line bg-surface p-5 shadow-xs lg:col-span-8 flex flex-col justify-between">
-            <div class="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-brand-50/60 blur-2xl" aria-hidden="true"></div>
-            <div class="relative z-10 flex flex-wrap items-center gap-4">
-                <span class="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-brand-200 bg-brand-50 text-xl font-bold text-brand-700 shadow-xs">
+        <div class="rounded-xl border border-slate-800 bg-slate-900 p-5 text-white shadow-xs lg:col-span-8 flex flex-col justify-between">
+            <div class="flex flex-wrap items-center gap-4">
+                <span class="flex size-14 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-brand-700 text-xl font-bold text-white shadow-xs">
                     {{ auth()->user()->initials() }}
                 </span>
                 <div class="min-w-0 flex-1">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center rounded-md border border-brand-200 bg-brand-50 px-2 py-0.5 text-[0.65rem] font-bold text-brand-700">
-                            {{ auth()->user()->role->label() }}
+                        <span class="inline-flex items-center rounded bg-brand-500/20 px-2 py-0.5 text-[11px] font-semibold text-brand-300 border border-brand-500/30">
+                            #{{ strtoupper(auth()->user()->role->value) }}
                         </span>
-                        <span class="text-xs text-muted">LPPM Universitas PMC</span>
+                        <span class="text-xs text-slate-400">LPPM Universitas PMC</span>
                     </div>
-                    <h1 class="mt-1 text-xl font-bold tracking-tight text-ink sm:text-2xl">
+                    <h1 class="mt-1 text-xl font-bold tracking-tight text-white sm:text-2xl">
                         {{ auth()->user()->name }}
                     </h1>
-                    <p class="text-xs text-muted">
+                    <p class="text-xs text-slate-300">
                         {{ $isAdmin ? 'Administrator Sistem LPPM · Verifikasi & Manajemen Data' : (auth()->user()->studyProgram?->displayName() ?? 'Dosen Universitas Pekanbaru Medical Center') }}
                     </p>
                 </div>
             </div>
 
-            <div class="relative z-10 mt-4 flex flex-wrap items-center gap-2 border-t border-line/60 pt-3 text-xs">
+            <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-800 pt-3 text-xs">
                 @if ($isAdmin)
-                    <x-ui.button :href="route('verifications.index')" size="sm" icon="heroicon-o-check-circle">
-                        Pemeriksaan Verifikasi ({{ $pendingCount }})
-                    </x-ui.button>
-                    <x-ui.button :href="route('reports.index')" variant="outline" size="sm" icon="heroicon-o-table-cells">
-                        Rekapitulasi Kinerja
-                    </x-ui.button>
+                    <a href="{{ route('verifications.index') }}"
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3 py-1.5 font-semibold text-white hover:bg-brand-800 transition">
+                        <x-heroicon-o-check-circle class="size-4" />
+                        <span>Pemeriksaan Verifikasi ({{ $pendingCount }})</span>
+                    </a>
+                    <a href="{{ route('reports.index') }}"
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 hover:bg-slate-700 transition">
+                        <x-heroicon-o-table-cells class="size-4" />
+                        <span>Rekapitulasi Kinerja</span>
+                    </a>
                 @else
-                    <x-ui.button :href="route('researches.create')" size="sm" icon="heroicon-o-plus">
-                        Tambah Penelitian
-                    </x-ui.button>
-                    <x-ui.button :href="route('community-services.create')" variant="outline" size="sm" icon="heroicon-o-plus">
-                        Tambah Pengabdian
-                    </x-ui.button>
+                    <a href="{{ route('researches.create') }}"
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3 py-1.5 font-semibold text-white hover:bg-brand-800 transition">
+                        <x-heroicon-o-plus class="size-4" />
+                        <span>Tambah Penelitian</span>
+                    </a>
+                    <a href="{{ route('community-services.create') }}"
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 hover:bg-slate-700 transition">
+                        <x-heroicon-o-plus class="size-4" />
+                        <span>Tambah Pengabdian</span>
+                    </a>
                 @endif
                 <a href="{{ route('public.lecturers.index') }}"
-                    class="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-line bg-canvas px-3 py-1.5 font-semibold text-muted transition hover:bg-surface hover:text-ink">
+                    class="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 font-semibold text-slate-300 transition hover:bg-slate-700 hover:text-white">
                     <x-heroicon-o-arrow-top-right-on-square class="size-3.5" />
-                    Portal Publik
+                    <span>Portal Publik</span>
                 </a>
             </div>
         </div>
 
-        {{-- Quick status widget / cards (like Preskool Leaves boxes) --}}
+        {{-- Quick status widget / cards (Preskool Leaves Boxes style) --}}
         <div class="grid grid-cols-2 gap-3 lg:col-span-4">
             @if ($isAdmin)
-                <div class="flex flex-col justify-between rounded-2xl border border-warning-line bg-warning-soft/60 p-4 shadow-xs">
+                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-warning-ink">Antrean Verifikasi</span>
-                        <div class="flex size-8 items-center justify-center rounded-xl bg-warning-line text-warning-ink">
-                            <x-heroicon-o-clock class="size-4" />
+                        <span class="text-xs font-semibold text-muted">Antrean Verifikasi</span>
+                        <div class="flex size-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                            <x-heroicon-o-clock class="size-4.5" />
                         </div>
                     </div>
                     <div class="mt-2">
                         <span class="text-2xl font-bold tabular-nums text-ink">{{ $pendingCount }}</span>
-                        <p class="text-[0.65rem] text-muted">Perlu ditinjau LPPM</p>
+                        <p class="text-[11px] text-muted">Perlu ditinjau LPPM</p>
                     </div>
                 </div>
-                <div class="flex flex-col justify-between rounded-2xl border border-info-line bg-info-soft/60 p-4 shadow-xs">
+                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-info-ink">Tahun Akademik</span>
-                        <div class="flex size-8 items-center justify-center rounded-xl bg-info-line text-info-ink">
-                            <x-heroicon-o-calendar class="size-4" />
+                        <span class="text-xs font-semibold text-muted">Tahun Akademik</span>
+                        <div class="flex size-9 items-center justify-center rounded-lg bg-navy-50 text-navy-700">
+                            <x-heroicon-o-calendar class="size-4.5" />
                         </div>
                     </div>
                     <div class="mt-2">
                         <span class="text-2xl font-bold tabular-nums text-ink">{{ $year }}</span>
-                        <p class="text-[0.65rem] text-muted">Tahun Berjalan</p>
+                        <p class="text-[11px] text-muted">Tahun Berjalan</p>
                     </div>
                 </div>
             @else
-                <div class="flex flex-col justify-between rounded-2xl border border-danger-line bg-danger-soft/60 p-4 shadow-xs">
+                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-danger-ink">Perlu Revisi</span>
-                        <div class="flex size-8 items-center justify-center rounded-xl bg-danger-line text-danger-ink">
-                            <x-heroicon-o-exclamation-triangle class="size-4" />
+                        <span class="text-xs font-semibold text-muted">Perlu Revisi</span>
+                        <div class="flex size-9 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
+                            <x-heroicon-o-exclamation-triangle class="size-4.5" />
                         </div>
                     </div>
                     <div class="mt-2">
                         <span class="text-2xl font-bold tabular-nums text-ink">{{ $needsRevision->count() }}</span>
-                        <p class="text-[0.65rem] text-muted">Dikembalikan verifikator</p>
+                        <p class="text-[11px] text-muted">Dikembalikan verifikator</p>
                     </div>
                 </div>
-                <div class="flex flex-col justify-between rounded-2xl border border-success-line bg-success-soft/60 p-4 shadow-xs">
+                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-success-ink">Karya Terverifikasi</span>
-                        <div class="flex size-8 items-center justify-center rounded-xl bg-success-line text-success-ink">
-                            <x-heroicon-o-check-badge class="size-4" />
+                        <span class="text-xs font-semibold text-muted">Karya Terverifikasi</span>
+                        <div class="flex size-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                            <x-heroicon-o-check-badge class="size-4.5" />
                         </div>
                     </div>
                     <div class="mt-2">
                         <span class="text-2xl font-bold tabular-nums text-ink">{{ array_sum($composition['data']) }}</span>
-                        <p class="text-[0.65rem] text-muted">Total seluruh modul</p>
+                        <p class="text-[11px] text-muted">Total seluruh modul</p>
                     </div>
                 </div>
             @endif

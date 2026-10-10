@@ -21,8 +21,7 @@ it('counts verified records per lecturer and module', function () {
     Research::factory()->verified()->withContributors()->count(2)->create(['created_by' => $lecturer->id, 'year' => 2024]);
     Research::factory()->draft()->withContributors()->create(['created_by' => $lecturer->id]);
     Publication::factory()->verified()->withContributors()->create(['created_by' => $lecturer->id, 'year' => 2023]);
-    // A member, not the creator, still counts.
-    Book::factory()->verified()->withContributors([$lecturer])->create();
+    Book::factory()->verified()->withContributors([$lecturer])->create(['year' => 2022]);
 
     $this->actingAs(admin());
 
