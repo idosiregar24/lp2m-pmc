@@ -136,3 +136,34 @@ it('ends the sessions of an account whose password is reset', function () {
     expect(DB::table('sessions')->where('user_id', $user->id)->exists())->toBeFalse()
         ->and($user->fresh()->remember_token)->not->toBe('token-lama');
 });
+
+it('allows super admin to assign admin access to a lecturer and revoke it', function () {
+    $superAdmin = superAdmin();
+    $lecturer = dosen();
+
+    // Super admin promotes lecturer to admin
+    $this->actingAs($superAdmin)
+        ->patch(route('users.change-role', $lecturer), ['role' => UserRole::Admin->value])
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    expect($lecturer->fresh()->role)->toBe(UserRole::Admin);
+
+    // Super admin demotes admin back to lecturer
+    $this->patch(route('users.change-role', $lecturer), ['role' => UserRole::Dosen->value])
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    expect($lecturer->fresh()->role)->toBe(UserRole::Dosen);
+});
+
+it('forbids regular admins from changing roles', function () {
+    $regularAdmin = admin();
+    $targetLecturer = dosen();
+
+    $this->actingAs($regularAdmin)
+        ->patch(route('users.change-role', $targetLecturer), ['role' => UserRole::Admin->value])
+        ->assertForbidden();
+
+    expect($targetLecturer->fresh()->role)->toBe(UserRole::Dosen);
+});

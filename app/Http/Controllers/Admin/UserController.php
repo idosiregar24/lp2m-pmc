@@ -169,6 +169,31 @@ class UserController extends Controller
         return back()->with('success', $user->is_active ? 'Akun diaktifkan kembali.' : 'Akun dinonaktifkan.');
     }
 
+    public function changeRole(Request $request, User $user): RedirectResponse
+    {
+        $this->authorize('manageRole', $user);
+
+        $request->validate([
+            'role' => ['required', 'string'],
+        ]);
+
+        $newRole = UserRole::tryFrom($request->input('role'));
+        if (! $newRole) {
+            return back()->with('error', 'Role yang dipilih tidak valid.');
+        }
+
+        $user->role = $newRole;
+        $user->save();
+
+        $message = match ($newRole) {
+            UserRole::Admin => "Hak akses Admin LPPM berhasil diberikan kepada {$user->name}.",
+            UserRole::Dosen => "Hak akses {$user->name} berhasil dikembalikan menjadi Dosen.",
+            UserRole::SuperAdmin => "Hak akses {$user->name} berhasil diubah menjadi Super Admin.",
+        };
+
+        return back()->with('success', $message);
+    }
+
     public function resetPassword(User $user, UserService $service): RedirectResponse
     {
         $this->authorize('resetPassword', $user);

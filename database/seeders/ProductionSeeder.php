@@ -24,9 +24,9 @@ class ProductionSeeder extends Seeder
         $this->call(MasterDataSeeder::class);
 
         User::query()->firstOrCreate(['username' => 'admin'], [
-            'name' => 'Admin BP2M',
+            'name' => 'Super Admin BP2M',
             'password' => $password,
-            'role' => UserRole::Admin,
+            'role' => UserRole::SuperAdmin,
             'is_active' => true,
             'must_change_password' => true,
         ]);

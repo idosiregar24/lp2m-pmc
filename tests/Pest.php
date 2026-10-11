@@ -19,6 +19,11 @@ function admin(array $attributes = []): User
     return User::factory()->admin()->create($attributes);
 }
 
+function superAdmin(array $attributes = []): User
+{
+    return User::factory()->superAdmin()->create($attributes);
+}
+
 function dosen(array $attributes = []): User
 {
     return User::factory()->create($attributes);

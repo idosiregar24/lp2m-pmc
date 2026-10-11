@@ -26,7 +26,16 @@ class UserPolicy
 
     public function update(User $actor, User $user): bool
     {
+        if ($user->isSuperAdmin()) {
+            return $actor->isSuperAdmin();
+        }
+
         return $actor->isAdmin();
+    }
+
+    public function manageRole(User $actor, User $user): bool
+    {
+        return $actor->isSuperAdmin() && ! $actor->is($user);
     }
 
     /**
@@ -34,11 +43,19 @@ class UserPolicy
      */
     public function toggleActive(User $actor, User $user): bool
     {
+        if ($user->isSuperAdmin() && ! $actor->isSuperAdmin()) {
+            return false;
+        }
+
         return $actor->isAdmin() && ! $actor->is($user);
     }
 
     public function resetPassword(User $actor, User $user): bool
     {
+        if ($user->isSuperAdmin() && ! $actor->isSuperAdmin()) {
+            return false;
+        }
+
         return $actor->isAdmin();
     }
 
@@ -47,6 +64,10 @@ class UserPolicy
      */
     public function delete(User $actor, User $user): bool
     {
+        if ($user->isSuperAdmin()) {
+            return false;
+        }
+
         return $actor->isAdmin() && ! $actor->is($user) && ! $user->hasActivityData();
     }
 }

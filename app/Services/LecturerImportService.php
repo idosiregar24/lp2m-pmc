@@ -306,35 +306,67 @@ class LecturerImportService
     }
 
     /**
-     * Generate unique institutional username for lecturer.
+     * Generate unique single-word username for lecturer (satu kata saja).
      */
     private function generateUniqueUsername(string $name, ?string $nidn): string
     {
-        // Extract main name before degrees (after comma)
-        $mainName = trim(Str::before($name, ','));
+        // 1. Strip degrees after comma
+        $beforeComma = trim(Str::before($name, ','));
 
-        // Strip academic title prefixes
-        $cleaned = preg_replace('/^(dr\.|drg\.|dr\s+|drg\s+|prof\.|prof\s+|ns\.|ns\s+|bdn\.|bdn\s+|apt\.|apt\s+|ir\.|ir\s+|h\.|hj\.)/i', '', $mainName);
-        $cleaned = trim($cleaned ?: $mainName);
+        // 2. Tokenize words by whitespace
+        $words = preg_split('/[\s]+/', $beforeComma, -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
-        $slug = Str::slug($cleaned, '.');
-        $base = substr($slug, 0, 24);
+        // Common title prefixes to strip
+        $titlePrefixes = [
+            'dr', 'drg', 'prof', 'ns', 'bdn', 'apt', 'ir', 'h', 'hj', 'drs', 'dra', 'kh', 'ust', 'ustadz', 'ustadzah',
+        ];
 
-        if (strlen($base) < 3) {
-            $base = 'dosen.'.($nidn ?: Str::lower(Str::random(5)));
+        $validWords = [];
+        foreach ($words as $w) {
+            $cleanedWord = strtolower(trim(preg_replace('/[^a-zA-Z]/', '', $w)));
+            if ($cleanedWord === '') {
+                continue;
+            }
+            // Skip title if it ends with dot (e.g. "Dr.", "Ns.") or matches known title prefixes
+            if (in_array($cleanedWord, $titlePrefixes, true) || str_ends_with(trim($w), '.')) {
+                continue;
+            }
+            $validWords[] = $cleanedWord;
         }
+
+        // Pick the first clean word
+        $firstWord = $validWords[0] ?? '';
+
+        // If first word is empty, fallback to clean NIDN or 'dosen'
+        if ($firstWord === '') {
+            $firstWord = 'dosen';
+        }
+
+        // Ensure minimum 4 characters (system validation regex is ^[a-z][a-z0-9._]{3,29}$)
+        // If shorter than 4 chars, merge with second word without spaces/dots (e.g. 'dwi' + 'putri' -> 'dwiputri')
+        // otherwise append '1' (e.g. 'dwi' -> 'dwi1')
+        $base = $firstWord;
+        if (strlen($base) < 4) {
+            if (isset($validWords[1]) && strlen($validWords[1]) >= 2) {
+                $base .= $validWords[1];
+            } else {
+                $base .= '1';
+            }
+        }
+
+        // Cut if too long (keep within 20 chars for single-word username)
+        $base = substr($base, 0, 20);
 
         // Ensure starts with a letter
         if (! preg_match('/^[a-z]/', $base)) {
-            $base = 'd.'.$base;
+            $base = 'd'.$base;
         }
 
-        $base = substr($base, 0, 26);
         $username = $base;
-        $counter = 1;
+        $counter = 2;
 
         while (User::query()->where('username', $username)->exists()) {
-            $username = $base.$counter;
+            $username = $base . $counter;
             $counter++;
         }
 

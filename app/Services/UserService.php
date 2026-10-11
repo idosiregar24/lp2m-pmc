@@ -37,7 +37,11 @@ class UserService
         $attributes = $this->attributes($data);
 
         if ($user->is($actor)) {
-            $this->guardSelf($attributes);
+            $this->guardSelf($actor, $attributes);
+        } elseif (isset($attributes['role']) && $attributes['role'] !== $user->role->value) {
+            if (! $actor->isSuperAdmin()) {
+                throw ValidationException::withMessages(['role' => 'Hanya Super Admin yang dapat mengubah role pengguna.']);
+            }
         }
 
         $user->fill($attributes);
@@ -116,10 +120,10 @@ class UserService
      *
      * @param  array<string, mixed>  $attributes
      */
-    private function guardSelf(array $attributes): void
+    private function guardSelf(User $actor, array $attributes): void
     {
-        if (($attributes['role'] ?? UserRole::Admin->value) !== UserRole::Admin->value) {
-            throw ValidationException::withMessages(['role' => 'Anda tidak dapat menurunkan role akun Anda sendiri.']);
+        if (isset($attributes['role']) && $attributes['role'] !== $actor->role->value) {
+            throw ValidationException::withMessages(['role' => 'Anda tidak dapat mengubah role akun Anda sendiri.']);
         }
 
         if (array_key_exists('is_active', $attributes) && ! $attributes['is_active']) {

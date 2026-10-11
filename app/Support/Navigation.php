@@ -40,11 +40,11 @@ final class Navigation
             ],
             [
                 'label' => 'Administrasi',
-                'roles' => [UserRole::Admin],
+                'roles' => [UserRole::SuperAdmin, UserRole::Admin],
                 'items' => [
                     self::item('Verifikasi', 'heroicon-o-clipboard-document-check', 'verifications.index', 'verifications.*',
                         badge: fn () => Verifiable::pendingCount()),
-                    self::item('Pengguna', 'heroicon-o-users', 'users.index', 'users.*'),
+                    self::item('Dosen/Pengguna', 'heroicon-o-users', 'users.index', 'users.*'),
                     self::item('Data Master', 'heroicon-o-circle-stack', 'master.faculties.index', 'master.*'),
                     self::item('Rekap', 'heroicon-o-chart-bar', 'reports.index', 'reports.*'),
                     self::item('Pengaturan', 'heroicon-o-cog-6-tooth', 'settings.edit', 'settings.*'),

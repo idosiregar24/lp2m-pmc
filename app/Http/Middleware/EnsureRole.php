@@ -16,7 +16,18 @@ class EnsureRole
     {
         $user = $request->user();
 
-        abort_unless($user && in_array($user->role, array_map(UserRole::from(...), $roles), true), 403);
+        if (! $user) {
+            abort(403);
+        }
+
+        $allowedRoles = array_map(UserRole::from(...), $roles);
+
+        // Super Admin automatically passes checks that permit ADMIN
+        if ($user->role === UserRole::SuperAdmin && in_array(UserRole::Admin, $allowedRoles, true)) {
+            return $next($request);
+        }
+
+        abort_unless(in_array($user->role, $allowedRoles, true), 403);
 
         return $next($request);
     }

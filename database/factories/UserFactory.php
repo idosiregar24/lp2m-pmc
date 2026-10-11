@@ -48,6 +48,15 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function superAdmin(): static
+    {
+        return $this->state(fn () => [
+            'role' => UserRole::SuperAdmin,
+            'nidn_nuptk' => null,
+            'study_program_id' => null,
+        ]);
+    }
+
     public function inactive(): static
     {
         return $this->state(fn () => ['is_active' => false]);

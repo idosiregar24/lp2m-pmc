@@ -35,14 +35,19 @@ class StoreUserRequest extends FormRequest
         $isDosen = $this->input('role') === UserRole::Dosen->value;
         $ignoreId = $this->targetUser()?->id;
 
+        $allowedRoles = [UserRole::Dosen->value, UserRole::Admin->value];
+        if ($this->user()?->isSuperAdmin()) {
+            $allowedRoles[] = UserRole::SuperAdmin->value;
+        }
+
         return [
             'name' => ['required', 'string', 'max:150'],
-            'role' => ['required', Rule::enum(UserRole::class)],
+            'role' => ['required', Rule::in($allowedRoles)],
             'nidn_nuptk' => [Rule::requiredIf($isDosen), 'nullable', 'regex:/^(\d{10}|\d{16})$/', Rule::unique('users', 'nidn_nuptk')->ignore($ignoreId)],
             'faculty_id' => [Rule::requiredIf($isDosen), 'nullable', 'integer', 'exists:faculties,id'],
             'study_program_id' => [
                 Rule::requiredIf($isDosen), 'nullable', 'integer',
-                Rule::exists('study_programs', 'id')->where('faculty_id', (int) $this->input('faculty_id')),
+                Rule::exists('study_programs', 'id')->when($this->filled('faculty_id'), fn ($r) => $r->where('faculty_id', (int) $this->input('faculty_id'))),
             ],
             'username' => ['required', 'string', 'regex:/^[a-z][a-z0-9._]{3,29}$/', Rule::unique('users', 'username')->ignore($ignoreId)],
             'password' => $this->passwordRules(),

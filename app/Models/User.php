@@ -66,9 +66,14 @@ class User extends Authenticatable
         return $this->hasMany(Contributor::class);
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === UserRole::SuperAdmin;
+    }
+
     public function isAdmin(): bool
     {
-        return $this->role === UserRole::Admin;
+        return in_array($this->role, [UserRole::SuperAdmin, UserRole::Admin], true);
     }
 
     public function isDosen(): bool
@@ -93,7 +98,11 @@ class User extends Authenticatable
      */
     public function scopeLecturers(Builder $query): Builder
     {
-        return $query->where('role', UserRole::Dosen)->where('is_active', true)->orderBy('name');
+        return $query->where(fn (Builder $q) => $q
+            ->where('role', UserRole::Dosen)
+            ->orWhere(fn (Builder $sq) => $sq->whereIn('role', [UserRole::Admin, UserRole::SuperAdmin])->whereNotNull('study_program_id')))
+            ->where('is_active', true)
+            ->orderBy('name');
     }
 
     /**
@@ -108,7 +117,10 @@ class User extends Authenticatable
         return self::query()
             // Current members stay pickable even if since deactivated or made Admin.
             ->where(fn (Builder $q) => $q
-                ->where(fn (Builder $q) => $q->where('role', UserRole::Dosen)->where('is_active', true))
+                ->where(fn (Builder $sq) => $sq
+                    ->where('role', UserRole::Dosen)
+                    ->orWhere(fn (Builder $adm) => $adm->whereIn('role', [UserRole::Admin, UserRole::SuperAdmin])->whereNotNull('study_program_id')))
+                ->where('is_active', true)
                 ->orWhereIn('id', $alwaysInclude))
             ->orderBy('name')
             ->get(['id', 'name', 'nidn_nuptk'])

@@ -1,8 +1,8 @@
-{{-- Shared by create & edit. Expects $user, $roles, $faculties, $programs, $action, $method. --}}
 @php
     $isEdit = $user->exists;
     $isSelf = $isEdit && $user->is(auth()->user());
-    $role = old('role', $user->role?->value);
+    $canChangeRole = auth()->user()->isSuperAdmin() && ! $isSelf;
+    $role = old('role', $user->role?->value ?? \App\Enums\UserRole::Dosen->value);
 @endphp
 
 <form method="POST" action="{{ $action }}" class="space-y-6" x-data="{ busy: false, role: @js($role) }" @submit="busy = true">
@@ -21,11 +21,18 @@
                 <x-form.input name="name" :value="$user->name" maxlength="150" required />
             </x-form.field>
 
-            <x-form.field name="role" label="Role" required>
-                <x-form.select name="role" :options="$roles" :value="$user->role" x-model="role" required :disabled="$isSelf" />
-                @if ($isSelf)
-                    <input type="hidden" name="role" value="{{ $user->role->value }}">
-                    <p class="text-xs text-muted">Role akun Anda sendiri tidak dapat diubah.</p>
+            <x-form.field name="role" label="Role & Hak Akses" required>
+                @if ($canChangeRole)
+                    <x-form.select name="role" :options="$roles" :value="$user->role" x-model="role" required />
+                    <p class="text-xs text-muted">Sebagai Super Admin, Anda dapat menentukan role dosen atau administrator.</p>
+                @else
+                    <x-form.select name="role" :options="$roles" :value="$user->role" x-model="role" required disabled />
+                    <input type="hidden" name="role" value="{{ $user->role?->value ?? \App\Enums\UserRole::Dosen->value }}">
+                    @if ($isSelf)
+                        <p class="text-xs text-muted">Role akun Anda sendiri tidak dapat diubah.</p>
+                    @else
+                        <p class="text-xs text-muted">Hanya Super Admin yang berwenang menentukan hak akses admin.</p>
+                    @endif
                 @endif
             </x-form.field>
 
@@ -35,7 +42,7 @@
                     <span x-show="role === 'DOSEN'" class="text-danger-ink" aria-hidden="true">*</span>
                 </x-form.label>
                 <x-form.input name="nidn_nuptk" :value="$user->nidn_nuptk" inputmode="numeric" maxlength="16" x-bind:required="role === 'DOSEN'" />
-                <p class="text-xs text-muted">10 digit (NIDN/NIDK) atau 16 digit (NUPTK).</p>
+                <p class="text-xs text-muted">10 digit (NIDN/NIDK) atau 16 digit (NUPTK)<span x-show="role !== 'DOSEN'"> (opsional untuk dosen dengan peran Admin)</span>.</p>
                 <x-form.error name="nidn_nuptk" />
             </div>
 

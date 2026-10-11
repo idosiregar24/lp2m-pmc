@@ -16,8 +16,8 @@ class UserSeeder extends Seeder
     {
         $programs = StudyProgram::query()->pluck('id');
 
-        User::factory()->admin()->create([
-            'name' => 'Admin BP2M',
+        User::factory()->superAdmin()->create([
+            'name' => 'Super Admin BP2M',
             'username' => 'admin',
         ]);
 

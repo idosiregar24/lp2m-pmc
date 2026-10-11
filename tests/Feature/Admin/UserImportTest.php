@@ -50,10 +50,11 @@ it('imports lecturers from excel file successfully', function () {
     $response->assertRedirect(route('users.index'));
     $response->assertSessionHas('success');
 
-    // Assert users created
+    // Assert users created with single-word usernames
     $user1 = User::query()->where('name', 'Anugerah Humairah, S.Gz, M.kes')->first();
     expect($user1)->not->toBeNull()
         ->and($user1->role)->toBe(UserRole::Dosen)
+        ->and($user1->username)->toBe('anugerah')
         ->and($user1->nidn_nuptk)->toBe('1019099006')
         ->and($user1->must_change_password)->toBeTrue()
         ->and($user1->is_active)->toBeTrue();
@@ -67,12 +68,14 @@ it('imports lecturers from excel file successfully', function () {
 
     $user3 = User::query()->where('name', 'Fadhly Alfallah, S.Kom., M.Kom')->first();
     expect($user3)->not->toBeNull()
+        ->and($user3->username)->toBe('fadhly')
         ->and($user3->study_program_id)->toBe($bisnisDigitalProdi->id)
         ->and($user3->nidn_nuptk)->toBe('7138779680130080');
 
     // Assert user with empty NIDN/NUPTK
     $user2 = User::query()->where('name', 'Ns. Wahyu Saputra, M.Kep')->first();
     expect($user2)->not->toBeNull()
+        ->and($user2->username)->toBe('wahyu')
         ->and($user2->nidn_nuptk)->toBeNull();
 
     @unlink($tempFile);

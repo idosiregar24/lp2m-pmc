@@ -88,6 +88,7 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::resource('pengguna', UserController::class)
                 ->names('users')->parameters(['pengguna' => 'user']);
             Route::patch('pengguna/{user}/status', [UserController::class, 'toggleActive'])->name('users.toggle-active');
+            Route::patch('pengguna/{user}/role', [UserController::class, 'changeRole'])->name('users.change-role');
             Route::patch('pengguna/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 
             Route::prefix('master')->name('master.')->group(function () {
