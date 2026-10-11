@@ -48,7 +48,11 @@ class DemoDataSeeder extends Seeder
     private function seedModule(string $model, int $count, ?callable $attributes = null): void
     {
         $lecturers = User::query()->where('role', UserRole::Dosen)->get();
-        $admin = User::query()->where('role', UserRole::Admin)->first();
+        if ($lecturers->isEmpty()) {
+            return;
+        }
+
+        $admin = User::query()->whereIn('role', [UserRole::SuperAdmin, UserRole::Admin])->first();
 
         foreach (range(1, $count) as $i) {
             // The demo "dosen" account owns the first few, so its pages are not empty.
