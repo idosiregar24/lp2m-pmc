@@ -29,6 +29,17 @@ class UserSeeder extends Seeder
             'role' => UserRole::Dosen,
         ]);
 
-        User::factory()->count(10)->sequence(fn () => ['study_program_id' => $programs->random()])->create();
+        $excelFile = collect([
+            database_path('seeders/data/dosen.xlsx'),
+            database_path('seeders/data/dosen.csv'),
+            storage_path('app/dosen.xlsx'),
+            storage_path('app/dosen.csv'),
+        ])->first(fn ($path) => file_exists($path));
+
+        if ($excelFile) {
+            app(\App\Services\LecturerImportService::class)->import($excelFile);
+        } else {
+            User::factory()->count(10)->sequence(fn () => ['study_program_id' => $programs->random()])->create();
+        }
     }
 }

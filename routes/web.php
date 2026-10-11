@@ -81,6 +81,10 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::post('buka-kembali', [VerificationController::class, 'reopen'])->name('reopen');
             });
 
+            Route::get('pengguna/impor', [UserController::class, 'importForm'])->name('users.import');
+            Route::post('pengguna/impor', [UserController::class, 'processImport'])->name('users.import.process');
+            Route::get('pengguna/template-excel', [UserController::class, 'downloadTemplate'])->name('users.import.template');
+
             Route::resource('pengguna', UserController::class)
                 ->names('users')->parameters(['pengguna' => 'user']);
             Route::patch('pengguna/{user}/status', [UserController::class, 'toggleActive'])->name('users.toggle-active');

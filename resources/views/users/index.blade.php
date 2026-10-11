@@ -1,7 +1,10 @@
 <x-layouts.app title="Pengguna">
     <x-shared.page-header title="Pengguna" description="Akun admin BP2M dan dosen. Akun yang sudah punya data dinonaktifkan, bukan dihapus." icon="heroicon-o-users">
         <x-slot:actions>
-            <x-ui.button :href="route('users.create')" icon="heroicon-o-plus" class="w-full sm:w-auto">Tambah Pengguna</x-ui.button>
+            <div class="flex flex-wrap items-center gap-2">
+                <x-ui.button :href="route('users.import')" variant="outline" icon="heroicon-o-arrow-up-tray" class="w-full sm:w-auto">Impor Excel</x-ui.button>
+                <x-ui.button :href="route('users.create')" icon="heroicon-o-plus" class="w-full sm:w-auto">Tambah Pengguna</x-ui.button>
+            </div>
         </x-slot:actions>
     </x-shared.page-header>
 

@@ -9,18 +9,57 @@ use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\Faculty;
 use App\Models\StudyProgram;
 use App\Models\User;
+use App\Services\LecturerImportService;
 use App\Services\UserService;
 use App\Support\Verifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Kelola User (PRD §4.2) — Admin only (route role:ADMIN + UserPolicy).
  */
 class UserController extends Controller
 {
+    public function importForm(): View
+    {
+        $this->authorize('create', User::class);
+
+        return view('users.import');
+    }
+
+    public function processImport(Request $request, LecturerImportService $importService): RedirectResponse
+    {
+        $this->authorize('create', User::class);
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:10240'],
+            'update_existing' => ['nullable', 'boolean'],
+        ], [
+            'file.required' => 'Silakan pilih berkas spreadsheet (.xlsx, .xls, .csv) terlebih dahulu.',
+            'file.mimes' => 'Format berkas harus berupa spreadsheet Excel (.xlsx, .xls) atau CSV.',
+            'file.max' => 'Ukuran berkas tidak boleh melebihi 10 MB.',
+        ]);
+
+        $updateExisting = $request->boolean('update_existing', true);
+        $result = $importService->import($request->file('file'), $updateExisting);
+
+        return redirect()->route('users.index')->with(
+            'success',
+            "Impor data dosen selesai! {$result['imported']} akun dosen baru ditambahkan, {$result['updated']} data dosen diperbarui."
+        );
+    }
+
+    public function downloadTemplate(LecturerImportService $importService): BinaryFileResponse
+    {
+        $this->authorize('create', User::class);
+
+        $filePath = $importService->generateTemplate();
+
+        return response()->download($filePath, 'template-data-dosen-pmc.xlsx')->deleteFileAfterSend(true);
+    }
     public function index(Request $request): View
     {
         $this->authorize('viewAny', User::class);
