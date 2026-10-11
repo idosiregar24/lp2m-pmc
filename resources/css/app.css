@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/plus-jakarta-sans';
 @import 'tom-select/dist/css/tom-select.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -15,7 +15,7 @@
  | see .claude/rules/design-standards.md.
  */
 @theme {
-    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 
     /* brand = PMC red — primary actions, active markers, focus */
     --color-brand-50: #fdf2f2;
