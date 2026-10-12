@@ -1,12 +1,12 @@
 <x-layouts.public title="Direktori & Kinerja Dosen">
     {{-- Institutional Hero Banner (PCR & PMC Identity Style) --}}
-    <section class="overflow-hidden rounded-2xl border border-[#630909] bg-gradient-to-br from-[#7a0d0d] via-[#660909] to-[#4f0606] p-6 text-white shadow-xs sm:p-8">
-        <div class="max-w-3xl space-y-3">
+    <section class="overflow-hidden rounded-2xl border border-[#630909] bg-gradient-to-br from-[#7a0d0d] via-[#660909] to-[#4f0606] p-4 text-white shadow-xs sm:p-6 lg:p-8">
+        <div class="max-w-3xl space-y-2 sm:space-y-3">
             <div class="flex flex-wrap items-center gap-2">
                 <span class="rounded-md bg-white/15 px-2.5 py-0.5 text-[10px] font-bold text-white border border-white/20 uppercase tracking-wider">PORTAL TRIDHARMA</span>
                 <span class="text-xs text-brand-200 font-medium">Universitas Pekanbaru Medical Center</span>
             </div>
-            <h1 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            <h1 class="text-xl font-extrabold tracking-tight text-white sm:text-2xl lg:text-3xl">
                 Direktori &amp; Kinerja Dosen LPPM
             </h1>
             <p class="text-xs leading-relaxed text-brand-100/90 sm:text-sm">
@@ -15,21 +15,21 @@
         </div>
 
         {{-- Direct Search Box in Hero Banner --}}
-        <form method="GET" action="{{ route('public.lecturers.index') }}" class="mt-6 flex flex-col gap-2 sm:flex-row max-w-2xl">
+        <form method="GET" action="{{ route('public.lecturers.index') }}" class="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row max-w-2xl">
             @if (!empty($filters['faculty']))
                 <input type="hidden" name="faculty" value="{{ $filters['faculty'] }}">
             @endif
             @if (!empty($filters['study_program']))
                 <input type="hidden" name="study_program" value="{{ $filters['study_program'] }}">
             @endif
-            <div class="relative flex-1">
+            <div class="relative flex-1 min-w-0">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                     <x-heroicon-o-magnifying-glass class="size-4" />
                 </div>
                 <input type="search" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Cari nama dosen / program studi..."
                     class="w-full rounded-xl border border-white/20 bg-white py-2.5 pl-10 pr-4 text-xs text-ink placeholder:text-slate-400 shadow-sm focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/40 sm:text-sm">
             </div>
-            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-gold-400 px-5 py-2.5 text-xs font-bold text-gold-950 shadow-sm transition hover:bg-gold-500 active:scale-[0.98] sm:text-sm">
+            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-gold-400 px-5 py-2.5 text-xs font-bold text-gold-950 shadow-sm transition hover:bg-gold-500 active:scale-[0.98] sm:text-sm shrink-0">
                 <x-heroicon-o-magnifying-glass class="size-4" />
                 <span>Cari Dosen</span>
             </button>
@@ -37,101 +37,101 @@
     </section>
 
     {{-- Summary Stats Grid (Cloudflare / shadcn KPI Cards) --}}
-    <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" aria-label="Statistik Kinerja LPPM">
+    <section class="grid grid-cols-2 gap-2.5 sm:gap-3 sm:grid-cols-3 lg:grid-cols-6 min-w-0 w-full" aria-label="Statistik Kinerja LPPM">
         {{-- Dosen Aktif --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs transition hover:border-brand-200">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-muted">Dosen Terdaftar</span>
-                <div class="flex size-9 items-center justify-center rounded-lg border border-slate-200/80 bg-slate-100 text-slate-700 shadow-2xs">
-                    <x-heroicon-o-users class="size-4.5" />
+        <div class="rounded-xl border border-line bg-surface p-3 sm:p-4 shadow-xs transition hover:border-brand-200 min-w-0">
+            <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] sm:text-xs font-medium text-muted truncate">Dosen Terdaftar</span>
+                <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200/80 bg-slate-100 text-slate-700 shadow-2xs">
+                    <x-heroicon-o-users class="size-4 sm:size-4.5" />
                 </div>
             </div>
-            <p class="mt-3 text-2xl font-bold tabular-nums text-ink">{{ $totalLecturers ?? $lecturers->total() }}</p>
-            <p class="mt-0.5 text-[11px] text-muted">Tenaga pendidik aktif</p>
+            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl font-bold tabular-nums text-ink">{{ $totalLecturers ?? $lecturers->total() }}</p>
+            <p class="mt-0.5 text-[10px] sm:text-[11px] text-muted truncate">Tenaga pendidik aktif</p>
         </div>
 
         {{-- Penelitian --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs transition hover:border-brand-200">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-muted">Penelitian</span>
-                <div class="flex size-9 items-center justify-center rounded-lg border border-brand-200/70 bg-brand-50 text-brand-700 shadow-2xs">
-                    <x-heroicon-o-beaker class="size-4.5" />
+        <div class="rounded-xl border border-line bg-surface p-3 sm:p-4 shadow-xs transition hover:border-brand-200 min-w-0">
+            <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] sm:text-xs font-medium text-muted truncate">Penelitian</span>
+                <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-lg border border-brand-200/70 bg-brand-50 text-brand-700 shadow-2xs">
+                    <x-heroicon-o-beaker class="size-4 sm:size-4.5" />
                 </div>
             </div>
-            <p class="mt-3 text-2xl font-bold tabular-nums text-brand-700">{{ $stats['research'] ?? 0 }}</p>
-            <p class="mt-0.5 text-[11px] text-muted">Karya terverifikasi</p>
+            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl font-bold tabular-nums text-brand-700">{{ $stats['research'] ?? 0 }}</p>
+            <p class="mt-0.5 text-[10px] sm:text-[11px] text-muted truncate">Karya terverifikasi</p>
         </div>
 
         {{-- Pengabdian --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs transition hover:border-success-line">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-muted">Pengabdian</span>
-                <div class="flex size-9 items-center justify-center rounded-lg border border-success-line bg-success-soft text-success-ink shadow-2xs">
-                    <x-heroicon-o-heart class="size-4.5" />
+        <div class="rounded-xl border border-line bg-surface p-3 sm:p-4 shadow-xs transition hover:border-success-line min-w-0">
+            <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] sm:text-xs font-medium text-muted truncate">Pengabdian</span>
+                <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-lg border border-success-line bg-success-soft text-success-ink shadow-2xs">
+                    <x-heroicon-o-heart class="size-4 sm:size-4.5" />
                 </div>
             </div>
-            <p class="mt-3 text-2xl font-bold tabular-nums text-success-ink">{{ $stats['community_service'] ?? 0 }}</p>
-            <p class="mt-0.5 text-[11px] text-muted">Kegiatan terlaksana</p>
+            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl font-bold tabular-nums text-success-ink">{{ $stats['community_service'] ?? 0 }}</p>
+            <p class="mt-0.5 text-[10px] sm:text-[11px] text-muted truncate">Kegiatan terlaksana</p>
         </div>
 
         {{-- Publikasi --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs transition hover:border-info-line">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-muted">Publikasi</span>
-                <div class="flex size-9 items-center justify-center rounded-lg border border-info-line bg-info-soft text-info-ink shadow-2xs">
-                    <x-heroicon-o-document-text class="size-4.5" />
+        <div class="rounded-xl border border-line bg-surface p-3 sm:p-4 shadow-xs transition hover:border-info-line min-w-0">
+            <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] sm:text-xs font-medium text-muted truncate">Publikasi</span>
+                <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-lg border border-info-line bg-info-soft text-info-ink shadow-2xs">
+                    <x-heroicon-o-document-text class="size-4 sm:size-4.5" />
                 </div>
             </div>
-            <p class="mt-3 text-2xl font-bold tabular-nums text-info-ink">{{ $stats['publication'] ?? 0 }}</p>
-            <p class="mt-0.5 text-[11px] text-muted">Jurnal &amp; prosiding</p>
+            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl font-bold tabular-nums text-info-ink">{{ $stats['publication'] ?? 0 }}</p>
+            <p class="mt-0.5 text-[10px] sm:text-[11px] text-muted truncate">Jurnal &amp; prosiding</p>
         </div>
 
         {{-- Buku --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs transition hover:border-warning-line">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-muted">Buku</span>
-                <div class="flex size-9 items-center justify-center rounded-lg border border-warning-line bg-warning-soft text-warning-ink shadow-2xs">
-                    <x-heroicon-o-book-open class="size-4.5" />
+        <div class="rounded-xl border border-line bg-surface p-3 sm:p-4 shadow-xs transition hover:border-warning-line min-w-0">
+            <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] sm:text-xs font-medium text-muted truncate">Buku</span>
+                <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-lg border border-warning-line bg-warning-soft text-warning-ink shadow-2xs">
+                    <x-heroicon-o-book-open class="size-4 sm:size-4.5" />
                 </div>
             </div>
-            <p class="mt-3 text-2xl font-bold tabular-nums text-warning-ink">{{ $stats['book'] ?? 0 }}</p>
-            <p class="mt-0.5 text-[11px] text-muted">Buku ber-ISBN</p>
+            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl font-bold tabular-nums text-warning-ink">{{ $stats['book'] ?? 0 }}</p>
+            <p class="mt-0.5 text-[10px] sm:text-[11px] text-muted truncate">Buku ber-ISBN</p>
         </div>
 
         {{-- HKI --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs transition hover:border-purple-200">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-muted">HKI</span>
-                <div class="flex size-9 items-center justify-center rounded-lg border border-purple-200 bg-purple-50 text-purple-700 shadow-2xs">
-                    <x-heroicon-o-shield-check class="size-4.5" />
+        <div class="rounded-xl border border-line bg-surface p-3 sm:p-4 shadow-xs transition hover:border-purple-200 min-w-0">
+            <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] sm:text-xs font-medium text-muted truncate">HKI</span>
+                <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-lg border border-purple-200 bg-purple-50 text-purple-700 shadow-2xs">
+                    <x-heroicon-o-shield-check class="size-4 sm:size-4.5" />
                 </div>
             </div>
-            <p class="mt-3 text-2xl font-bold tabular-nums text-purple-700">{{ $stats['intellectual_property'] ?? 0 }}</p>
-            <p class="mt-0.5 text-[11px] text-muted">Hak cipta &amp; paten</p>
+            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl font-bold tabular-nums text-purple-700">{{ $stats['intellectual_property'] ?? 0 }}</p>
+            <p class="mt-0.5 text-[10px] sm:text-[11px] text-muted truncate">Hak cipta &amp; paten</p>
         </div>
     </section>
 
     {{-- Overall Statistics & Analytics Charts (PCR & Cloudflare Layout) --}}
-    <section class="grid gap-5 lg:grid-cols-3" aria-label="Grafik Statistik LPPM">
-        <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs lg:col-span-2">
-            <div class="flex flex-wrap items-center justify-between gap-2 bg-[#7a0d0d] px-5 py-3 text-white">
-                <div>
+    <section class="grid gap-5 lg:grid-cols-3 min-w-0 w-full" aria-label="Grafik Statistik LPPM">
+        <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs lg:col-span-2 min-w-0 w-full">
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-[#7a0d0d] px-4 py-3 sm:px-5 text-white">
+                <div class="min-w-0">
                     <h2 class="text-sm font-bold tracking-tight">Tren Kinerja Tridharma LPPM</h2>
-                    <p class="text-[11px] text-brand-100/90">Statistik data terverifikasi {{ $chart['labels'][0] }}–{{ $year }} per modul luaran</p>
+                    <p class="text-[11px] text-brand-100/90 truncate">Statistik data terverifikasi {{ $chart['labels'][0] }}–{{ $year }} per modul luaran</p>
                 </div>
-                <span class="inline-flex items-center gap-1 rounded-md bg-white/15 px-2 py-0.5 text-xs font-semibold text-white border border-white/20">
+                <span class="inline-flex items-center gap-1 rounded-md bg-white/15 px-2 py-0.5 text-xs font-semibold text-white border border-white/20 shrink-0">
                     <x-heroicon-o-chart-bar class="size-3.5" />
                     5 Tahun Terakhir
                 </span>
             </div>
-            <div class="p-5">
-                <div x-data="barChart(@js($chart))" class="h-64">
+            <div class="p-4 sm:p-5 min-w-0">
+                <div x-data="barChart(@js($chart))" class="relative h-64 w-full min-w-0">
                     <canvas x-ref="canvas" role="img" aria-label="Grafik perbandingan capaian per tahun untuk seluruh modul luaran"></canvas>
                 </div>
                 <details class="mt-3 text-xs">
                     <summary class="cursor-pointer font-medium text-muted hover:text-brand-700">Lihat rincian tabel per tahun</summary>
                     <div class="mt-2 overflow-x-auto rounded-lg border border-line">
-                        <table class="w-full text-left text-xs">
+                        <table class="w-full text-left text-xs min-w-[320px]">
                             <thead class="bg-canvas border-b border-line text-muted">
                                 <tr>
                                     <th class="px-3 py-2 font-semibold">Modul Luaran</th>
@@ -156,14 +156,14 @@
             </div>
         </div>
 
-        <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs flex flex-col justify-between">
-            <div class="bg-[#7a0d0d] px-5 py-3 text-white">
+        <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs flex flex-col justify-between min-w-0 w-full">
+            <div class="bg-[#7a0d0d] px-4 py-3 sm:px-5 text-white">
                 <h2 class="text-sm font-bold tracking-tight">Komposisi Luaran Terverifikasi</h2>
-                <p class="text-[11px] text-brand-100/90">Distribusi total {{ $totalOutputs }} karya ilmiah &amp; pengabdian</p>
+                <p class="text-[11px] text-brand-100/90 truncate">Distribusi total {{ $totalOutputs }} karya ilmiah &amp; pengabdian</p>
             </div>
-            <div class="p-5 flex-1 flex flex-col justify-center">
+            <div class="p-4 sm:p-5 flex-1 flex flex-col justify-center min-w-0">
                 @if ($totalOutputs > 0)
-                    <div x-data="donutChart(@js($composition))" class="h-56 py-1">
+                    <div x-data="donutChart(@js($composition))" class="relative h-56 w-full min-w-0 py-1">
                         <canvas x-ref="canvas" role="img" aria-label="Grafik persentase komposisi luaran LPPM"></canvas>
                     </div>
                 @else
@@ -172,7 +172,7 @@
                     </div>
                 @endif
             </div>
-            <div class="border-t border-line bg-canvas/40 px-5 py-3 flex items-center justify-between text-xs text-muted">
+            <div class="border-t border-line bg-canvas/40 px-4 py-3 sm:px-5 flex items-center justify-between text-xs text-muted">
                 <span>Total Luaran Resmi</span>
                 <span class="font-bold text-ink tabular-nums">{{ $totalOutputs }} Dokumen</span>
             </div>
@@ -180,8 +180,8 @@
     </section>
 
     {{-- Filter & Search Toolbar (shadcn style segmented control) --}}
-    <section class="rounded-xl border border-line bg-surface shadow-xs">
-        <div class="flex items-center justify-between border-b border-line bg-canvas/40 px-5 py-3.5">
+    <section class="rounded-xl border border-line bg-surface shadow-xs min-w-0 w-full overflow-hidden">
+        <div class="flex items-center justify-between border-b border-line bg-canvas/40 px-4 py-3 sm:px-5 sm:py-3.5">
             <div class="flex items-center gap-2">
                 <x-heroicon-o-adjustments-horizontal class="size-4 text-slate-500" />
                 <h2 class="text-xs font-bold uppercase tracking-wider text-slate-700">Pencarian &amp; Filter Fakultas</h2>
@@ -194,7 +194,7 @@
             @endif
         </div>
 
-        <form method="GET" action="{{ route('public.lecturers.index') }}" class="p-5 space-y-4">
+        <form method="GET" action="{{ route('public.lecturers.index') }}" class="p-4 sm:p-5 space-y-4">
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-12 items-end">
                 {{-- Search query input --}}
                 <div class="lg:col-span-4">
@@ -246,30 +246,32 @@
 
             {{-- Secondary filter row: Segmented control for Module categories --}}
             <div class="border-t border-line pt-3.5">
-                <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div class="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-lg border border-line bg-slate-100/80 p-1">
-                        <span class="text-[11px] font-semibold text-muted px-2">Modul:</span>
-                        <a href="{{ route('public.lecturers.index', array_merge($filters, ['has_modul' => null])) }}"
-                            @class([
-                                'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                                'border border-brand-200/70 bg-surface font-semibold text-brand-700 shadow-xs' => empty($filters['has_modul']),
-                                'border border-transparent text-slate-600 hover:bg-surface/60 hover:text-brand-700' => ! empty($filters['has_modul']),
-                            ])>
-                            Semua
-                        </a>
-                        @foreach ($modules as $modKey => $modInfo)
-                            <a href="{{ route('public.lecturers.index', array_merge($filters, ['has_modul' => $modKey])) }}"
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs">
+                    <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                        <div class="inline-flex items-center gap-1 rounded-lg border border-line bg-slate-100/80 p-1">
+                            <span class="text-[11px] font-semibold text-muted px-2 shrink-0">Modul:</span>
+                            <a href="{{ route('public.lecturers.index', array_merge($filters, ['has_modul' => null])) }}"
                                 @class([
-                                    'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                                    'border border-brand-200/70 bg-surface font-semibold text-brand-700 shadow-xs' => ($filters['has_modul'] ?? '') === $modKey,
-                                    'border border-transparent text-slate-600 hover:bg-surface/60 hover:text-brand-700' => ($filters['has_modul'] ?? '') !== $modKey,
+                                    'shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+                                    'border border-brand-200/70 bg-surface font-semibold text-brand-700 shadow-xs' => empty($filters['has_modul']),
+                                    'border border-transparent text-slate-600 hover:bg-surface/60 hover:text-brand-700' => ! empty($filters['has_modul']),
                                 ])>
-                                {{ $modInfo['label'] }}
+                                Semua
                             </a>
-                        @endforeach
+                            @foreach ($modules as $modKey => $modInfo)
+                                <a href="{{ route('public.lecturers.index', array_merge($filters, ['has_modul' => $modKey])) }}"
+                                    @class([
+                                        'shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+                                        'border border-brand-200/70 bg-surface font-semibold text-brand-700 shadow-xs' => ($filters['has_modul'] ?? '') === $modKey,
+                                        'border border-transparent text-slate-600 hover:bg-surface/60 hover:text-brand-700' => ($filters['has_modul'] ?? '') !== $modKey,
+                                    ])>
+                                    {{ $modInfo['label'] }}
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-2 ml-auto">
+                    <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0">
                         <span class="text-xs font-medium text-muted">Urutan:</span>
                         <select name="sort" onchange="this.form.submit()"
                             class="rounded-lg border border-line bg-surface px-2.5 py-1 text-xs text-ink focus:border-brand-200 focus:outline-none">
@@ -301,7 +303,7 @@
 
     {{-- Lecturer Grid --}}
     @if ($lecturers->isEmpty())
-        <div class="rounded-xl border border-line bg-surface p-12 text-center shadow-xs">
+        <div class="rounded-xl border border-line bg-surface p-8 sm:p-12 text-center shadow-xs">
             <div class="mx-auto flex size-12 items-center justify-center rounded-xl bg-canvas text-muted">
                 <x-heroicon-o-users class="size-6" />
             </div>
@@ -316,28 +318,28 @@
             </div>
         </div>
     @else
-        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
             @foreach ($lecturers as $lecturer)
                 @php
                     $row = $rows[$lecturer->id];
                     $totalLecturerOutputs = array_sum($row['counts']);
                 @endphp
-                <li>
-                    <div class="flex h-full flex-col justify-between rounded-xl border border-line bg-surface p-5 shadow-xs transition hover:border-brand-200/90 hover:shadow-sm">
+                <li class="min-w-0 w-full">
+                    <div class="flex h-full w-full min-w-0 flex-col justify-between rounded-xl border border-line bg-surface p-4 sm:p-5 shadow-xs transition hover:border-brand-200/90 hover:shadow-sm">
                         {{-- Lecturer Header --}}
-                        <div class="flex items-start gap-3.5">
-                            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl border border-brand-200/80 bg-brand-50 text-sm font-bold text-brand-700 shadow-2xs">
+                        <div class="flex items-start gap-3 sm:gap-3.5 min-w-0">
+                            <span class="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl border border-brand-200/80 bg-brand-50 text-xs sm:text-sm font-bold text-brand-700 shadow-2xs">
                                 {{ $lecturer->initials() }}
                             </span>
                             <div class="min-w-0 flex-1">
-                                <a href="{{ route('public.lecturers.show', $lecturer) }}" class="block truncate font-bold text-ink hover:text-brand-700 transition">
+                                <a href="{{ route('public.lecturers.show', $lecturer) }}" class="block truncate font-bold text-sm sm:text-base text-ink hover:text-brand-700 transition" title="{{ $lecturer->name }}">
                                     {{ $lecturer->name }}
                                 </a>
-                                <p class="mt-0.5 truncate text-xs text-muted">
+                                <p class="mt-0.5 truncate text-xs text-muted" title="{{ $lecturer->studyProgram?->displayName() ?? 'Dosen Tetap' }}">
                                     {{ $lecturer->studyProgram?->displayName() ?? 'Dosen Tetap' }}
                                 </p>
                                 @if ($lecturer->studyProgram?->faculty)
-                                    <span class="mt-1 inline-block text-[11px] font-medium text-slate-500">
+                                    <span class="mt-0.5 block truncate text-[11px] font-medium text-slate-500" title="{{ $lecturer->studyProgram->faculty->name }}">
                                         {{ $lecturer->studyProgram->faculty->name }}
                                     </span>
                                 @endif
@@ -345,16 +347,16 @@
                         </div>
 
                         {{-- Output Counter Matrix --}}
-                        <div class="my-4 rounded-lg border border-line bg-canvas/60 p-2.5">
+                        <div class="my-3 sm:my-4 w-full min-w-0 rounded-lg border border-line bg-canvas/60 p-2 sm:p-2.5">
                             <div class="mb-2 flex items-center justify-between text-[11px] font-semibold text-muted">
                                 <span>Kinerja Terverifikasi</span>
-                                <span class="rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold text-brand-700 border border-brand-200/70">Total: {{ $totalLecturerOutputs }}</span>
+                                <span class="rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold text-brand-700 border border-brand-200/70 shrink-0">Total: {{ $totalLecturerOutputs }}</span>
                             </div>
-                            <div class="grid grid-cols-5 gap-1 text-center">
+                            <div class="grid grid-cols-5 gap-1 text-center w-full min-w-0">
                                 @foreach ($modules as $alias => $module)
                                     @php($c = $row['counts'][$alias])
-                                    <div class="rounded bg-surface p-1.5 border border-line shadow-2xs">
-                                        <span class="block truncate text-[10px] font-medium text-muted" title="{{ $module['label'] }}">{{ $module['label'] }}</span>
+                                    <div class="min-w-0 rounded bg-surface p-1 sm:p-1.5 border border-line shadow-2xs">
+                                        <span class="block truncate text-[9px] sm:text-[10px] font-medium text-muted" title="{{ $module['label'] }}">{{ $module['label'] }}</span>
                                         <span @class([
                                             'mt-0.5 block text-xs font-bold tabular-nums',
                                             'text-brand-700' => $c > 0 && $alias === 'research',
@@ -370,11 +372,11 @@
                         </div>
 
                         {{-- Action link --}}
-                        <div class="mt-auto">
+                        <div class="mt-auto pt-1">
                             <a href="{{ route('public.lecturers.show', $lecturer) }}"
                                 class="flex w-full items-center justify-between rounded-lg border border-line bg-surface px-3 py-2 text-xs font-semibold text-ink transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 shadow-2xs active:scale-[0.99]">
                                 <span>Lihat Portofolio Lengkap</span>
-                                <x-heroicon-o-chevron-right class="size-3.5" />
+                                <x-heroicon-o-chevron-right class="size-3.5 shrink-0" />
                             </a>
                         </div>
                     </div>
@@ -383,7 +385,7 @@
         </ul>
 
         {{-- Pagination --}}
-        <div class="pt-4">
+        <div class="pt-4 overflow-x-auto w-full">
             {{ $lecturers->links() }}
         </div>
     @endif

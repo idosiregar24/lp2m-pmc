@@ -17,39 +17,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-canvas text-ink antialiased">
-    <header class="sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur shadow-2xs">
-        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-            <a href="{{ route('public.lecturers.index') }}" class="flex min-w-0 items-center gap-3 transition hover:opacity-90">
-                <x-ui.logo size="md" />
+<body class="min-h-screen bg-canvas text-ink antialiased overflow-x-hidden">
+    <header class="sticky top-0 z-30 w-full border-b border-line bg-surface/95 backdrop-blur shadow-2xs">
+        <div class="mx-auto flex max-w-7xl w-full items-center justify-between gap-3 sm:gap-4 px-4 py-2.5 sm:py-3 sm:px-6 lg:px-8">
+            <a href="{{ route('public.lecturers.index') }}" class="flex min-w-0 items-center gap-2.5 sm:gap-3 transition hover:opacity-90">
+                <x-ui.logo size="sm" class="shrink-0 sm:hidden" />
+                <x-ui.logo size="md" class="shrink-0 hidden sm:block" />
                 <span class="min-w-0 leading-tight">
-                    <span class="flex items-center gap-2">
-                        <span class="truncate text-base font-bold text-ink tracking-tight">LPPM Universitas PMC</span>
-                        <span class="hidden rounded px-1.5 py-0.2 text-[9px] font-bold bg-brand-50 text-brand-700 border border-brand-200/70 sm:inline">PORTAL PUBLIK</span>
+                    <span class="flex items-center gap-1.5 sm:gap-2">
+                        <span class="truncate text-sm sm:text-base font-bold text-ink tracking-tight">LPPM Universitas PMC</span>
+                        <span class="hidden rounded px-1.5 py-0.2 text-[9px] font-bold bg-brand-50 text-brand-700 border border-brand-200/70 md:inline">PORTAL PUBLIK</span>
                     </span>
-                    <span class="block truncate text-xs text-muted">Lembaga Penelitian dan Pengabdian kepada Masyarakat</span>
+                    <span class="block truncate text-[11px] sm:text-xs text-muted">Lembaga Penelitian &amp; Pengabdian Masyarakat</span>
                 </span>
             </a>
-            <nav class="flex items-center gap-2.5" aria-label="Menu publik">
+            <nav class="flex items-center gap-2 shrink-0" aria-label="Menu publik">
                 <a href="{{ route('public.lecturers.index') }}" class="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 sm:flex">
                     <x-heroicon-o-academic-cap class="size-4" />
                     Direktori Dosen
                 </a>
                 @auth
-                    <x-ui.button :href="route('dashboard')" variant="outline" size="sm" icon="heroicon-o-squares-2x2">Buka Dashboard</x-ui.button>
+                    <x-ui.button :href="route('dashboard')" variant="outline" size="sm" icon="heroicon-o-squares-2x2">Dashboard</x-ui.button>
                 @else
-                    <x-ui.button :href="route('login')" size="sm" icon="heroicon-o-arrow-right-end-on-rectangle">Masuk Sistem</x-ui.button>
+                    <x-ui.button :href="route('login')" size="sm" icon="heroicon-o-arrow-right-end-on-rectangle">
+                        <span class="hidden sm:inline">Masuk Sistem</span>
+                        <span class="sm:hidden">Masuk</span>
+                    </x-ui.button>
                 @endauth
             </nav>
         </div>
     </header>
 
-    <main class="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+    <main class="mx-auto max-w-7xl w-full min-w-0 space-y-6 px-4 py-6 sm:py-8 sm:px-6 lg:px-8">
         {{ $slot }}
     </main>
 
-    <footer class="mt-16 border-t border-line bg-surface">
-        <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-center text-xs text-muted sm:flex-row sm:px-6 sm:text-left lg:px-8">
+    <footer class="mt-16 border-t border-line bg-surface w-full">
+        <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 sm:py-8 text-center text-xs text-muted sm:flex-row sm:px-6 sm:text-left lg:px-8">
             <div class="flex items-center gap-2.5">
                 <x-ui.logo size="xs" />
                 <span>&copy; {{ now()->year }} LPPM Universitas Pekanbaru Medical Center · Data resmi terverifikasi.</span>

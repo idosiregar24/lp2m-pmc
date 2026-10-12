@@ -79,42 +79,52 @@
     <div class="grid gap-5 lg:grid-cols-12 items-start">
         {{-- Left Column: User Summary & KPI Status Panel --}}
         <div class="space-y-4 lg:col-span-4">
-            {{-- Profile Card --}}
-            <div class="rounded-xl border border-brand-200/80 bg-gradient-to-br from-brand-50/70 via-surface to-brand-50/20 p-5 shadow-xs">
-                <div class="flex items-center gap-3.5">
-                    <span class="flex size-12 shrink-0 items-center justify-center rounded-xl border border-brand-200/80 bg-brand-50 text-lg font-bold text-brand-700 shadow-2xs">
-                        {{ auth()->user()->initials() }}
+            {{-- Profile & Status Card (shadcn / Enterprise Style) --}}
+            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+                <div class="flex items-center justify-between border-b border-line bg-canvas/40 px-4 py-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Profil &amp; Status Kerja</span>
+                    <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-700">
+                        <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                        Aktif
                     </span>
-                    <div class="min-w-0 flex-1">
-                        <span class="inline-flex items-center rounded-md bg-brand-100 px-2 py-0.5 text-[10px] font-semibold text-brand-800 border border-brand-200/70">
-                            {{ strtoupper(auth()->user()->role->value) }}
-                        </span>
-                        <h2 class="truncate text-base font-bold text-ink">{{ auth()->user()->name }}</h2>
-                        <p class="truncate text-xs text-muted">{{ $isAdmin ? 'LPPM Universitas PMC' : (auth()->user()->studyProgram?->displayName() ?? 'Dosen PMC') }}</p>
+                </div>
+
+                <div class="p-4 sm:p-5">
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex size-11 shrink-0 items-center justify-center rounded-xl border border-slate-200/80 bg-slate-100 text-sm font-bold text-slate-800 shadow-2xs">
+                            {{ auth()->user()->initials() }}
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h2 class="truncate text-sm font-bold text-ink">{{ auth()->user()->name }}</h2>
+                            <p class="mt-0.5 truncate text-xs text-muted">{{ $isAdmin ? 'LPPM Universitas PMC' : (auth()->user()->studyProgram?->displayName() ?? 'Dosen PMC') }}</p>
+                        </div>
+                    </div>
+
+                    {{-- Unified Metric Strip --}}
+                    <div class="mt-4 grid grid-cols-2 divide-x divide-line rounded-lg border border-line bg-canvas/60 p-2.5">
+                        <div class="px-2">
+                            <span class="block text-[11px] font-medium text-muted">Tahun Aktif</span>
+                            <span class="mt-0.5 block text-base font-bold tabular-nums text-ink">{{ $year }}</span>
+                        </div>
+                        <div class="px-2 pl-3">
+                            <span class="block text-[11px] font-medium text-muted">{{ $isAdmin ? 'Antrean' : 'Perlu Revisi' }}</span>
+                            <span class="mt-0.5 block text-base font-bold tabular-nums {{ ($isAdmin ? $pendingCount : $needsRevision->count()) > 0 ? 'text-brand-700' : 'text-slate-700' }}">
+                                {{ $isAdmin ? $pendingCount : $needsRevision->count() }} <span class="text-xs font-normal text-muted">berkas</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-4 grid grid-cols-2 gap-2 border-t border-brand-200/50 pt-3">
-                    <div class="rounded-lg border border-brand-200/70 bg-surface p-2.5 shadow-2xs">
-                        <span class="text-[11px] font-medium text-muted block">Tahun Aktif</span>
-                        <span class="text-lg font-bold text-ink tabular-nums">{{ $year }}</span>
-                    </div>
-                    <div class="rounded-lg border border-brand-200/70 bg-surface p-2.5 shadow-2xs">
-                        <span class="text-[11px] font-medium text-muted block">{{ $isAdmin ? 'Antrean' : 'Revisi' }}</span>
-                        <span class="text-lg font-bold text-brand-700 tabular-nums">{{ $isAdmin ? $pendingCount : $needsRevision->count() }}</span>
-                    </div>
-                </div>
-
-                <div class="mt-3 flex flex-wrap gap-2 pt-1 text-xs">
+                <div class="border-t border-line bg-canvas/30 px-4 py-3">
                     @if ($isAdmin)
-                        <a href="{{ route('verifications.index') }}" class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#7a0d0d] px-3 py-1.5 font-semibold text-white shadow-xs hover:bg-brand-700 transition">
-                            <x-heroicon-o-check-circle class="size-3.5" />
-                            Verifikasi ({{ $pendingCount }})
+                        <a href="{{ route('verifications.index') }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#7a0d0d] px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-brand-700 active:scale-[0.99]">
+                            <x-heroicon-o-check-badge class="size-4" />
+                            <span>Tinjau Verifikasi ({{ $pendingCount }})</span>
                         </a>
                     @else
-                        <a href="{{ route('researches.create') }}" class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#7a0d0d] px-3 py-1.5 font-semibold text-white shadow-xs hover:bg-brand-700 transition">
-                            <x-heroicon-o-plus class="size-3.5" />
-                            Tambah Data
+                        <a href="{{ route('researches.create') }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#7a0d0d] px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-brand-700 active:scale-[0.99]">
+                            <x-heroicon-o-plus class="size-4" />
+                            <span>Tambah Data Baru</span>
                         </a>
                     @endif
                 </div>

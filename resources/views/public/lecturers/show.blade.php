@@ -7,15 +7,15 @@
     </nav>
 
     {{-- Lecturer Profile Hero Card (PMC Institutional Crimson Theme) --}}
-    <section class="overflow-hidden rounded-2xl border border-[#630909] bg-gradient-to-br from-[#7a0d0d] via-[#660909] to-[#4f0606] p-6 text-white shadow-xs sm:p-7">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <section class="overflow-hidden rounded-2xl border border-[#630909] bg-gradient-to-br from-[#7a0d0d] via-[#660909] to-[#4f0606] p-4 text-white shadow-xs sm:p-6 lg:p-7 min-w-0 w-full">
+        <div class="flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-center lg:justify-between min-w-0">
             {{-- Profile info --}}
-            <div class="flex items-start gap-4">
-                <span class="flex size-16 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-xl font-extrabold text-white shadow-xs">
+            <div class="flex items-start gap-3.5 sm:gap-4 min-w-0">
+                <span class="flex size-14 sm:size-16 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-lg sm:text-xl font-extrabold text-white shadow-xs">
                     {{ $lecturer->initials() }}
                 </span>
-                <div class="min-w-0">
-                    <div class="flex flex-wrap items-center gap-2">
+                <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
                         <span class="inline-flex items-center rounded-md bg-gold-400 px-2 py-0.5 text-[10px] font-bold text-gold-950 shadow-2xs">
                             DOSEN PMC
                         </span>
@@ -27,11 +27,11 @@
                         </span>
                     </div>
 
-                    <h1 class="mt-1.5 text-xl font-extrabold tracking-tight text-white sm:text-2xl">
+                    <h1 class="mt-1.5 text-lg font-extrabold tracking-tight text-white sm:text-2xl">
                         {{ $lecturer->name }}
                     </h1>
 
-                    <p class="mt-0.5 text-xs text-brand-100/90">
+                    <p class="mt-0.5 text-xs text-brand-100/90 truncate">
                         {{ $lecturer->studyProgram?->displayName() ?? 'Program Studi' }}
                         @if ($lecturer->studyProgram?->faculty)
                             <span class="text-white/40 mx-1">|</span>
@@ -42,41 +42,41 @@
             </div>
 
             {{-- Stat KPI Boxes --}}
-            <div class="grid grid-cols-3 gap-2 sm:grid-cols-6 lg:min-w-[32rem]">
-                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
-                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Penelitian</span>
-                    <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['research'] ?? 0 }}</span>
-                    <span class="text-[10px] text-brand-200/80">Karya</span>
+            <div class="grid grid-cols-3 gap-1.5 sm:gap-2 sm:grid-cols-6 lg:min-w-[32rem] min-w-0 w-full lg:w-auto">
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2 sm:p-2.5 text-center shadow-2xs min-w-0">
+                    <span class="text-[9px] sm:text-[10px] font-semibold text-brand-200 uppercase tracking-wider block truncate">Penelitian</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-bold tabular-nums text-white">{{ $counts['research'] ?? 0 }}</span>
+                    <span class="text-[9px] sm:text-[10px] text-brand-200/80">Karya</span>
                 </div>
 
-                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
-                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Pengabdian</span>
-                    <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['community_service'] ?? 0 }}</span>
-                    <span class="text-[10px] text-brand-200/80">Kegiatan</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2 sm:p-2.5 text-center shadow-2xs min-w-0">
+                    <span class="text-[9px] sm:text-[10px] font-semibold text-brand-200 uppercase tracking-wider block truncate">Pengabdian</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-bold tabular-nums text-white">{{ $counts['community_service'] ?? 0 }}</span>
+                    <span class="text-[9px] sm:text-[10px] text-brand-200/80">Kegiatan</span>
                 </div>
 
-                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
-                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Publikasi</span>
-                    <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['publication'] ?? 0 }}</span>
-                    <span class="text-[10px] text-brand-200/80">Artikel</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2 sm:p-2.5 text-center shadow-2xs min-w-0">
+                    <span class="text-[9px] sm:text-[10px] font-semibold text-brand-200 uppercase tracking-wider block truncate">Publikasi</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-bold tabular-nums text-white">{{ $counts['publication'] ?? 0 }}</span>
+                    <span class="text-[9px] sm:text-[10px] text-brand-200/80">Artikel</span>
                 </div>
 
-                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
-                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Buku</span>
-                    <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['book'] ?? 0 }}</span>
-                    <span class="text-[10px] text-brand-200/80">Judul</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2 sm:p-2.5 text-center shadow-2xs min-w-0">
+                    <span class="text-[9px] sm:text-[10px] font-semibold text-brand-200 uppercase tracking-wider block truncate">Buku</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-bold tabular-nums text-white">{{ $counts['book'] ?? 0 }}</span>
+                    <span class="text-[9px] sm:text-[10px] text-brand-200/80">Judul</span>
                 </div>
 
-                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
-                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">HKI</span>
-                    <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['intellectual_property'] ?? 0 }}</span>
-                    <span class="text-[10px] text-brand-200/80">Sertifikat</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2 sm:p-2.5 text-center shadow-2xs min-w-0">
+                    <span class="text-[9px] sm:text-[10px] font-semibold text-brand-200 uppercase tracking-wider block truncate">HKI</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-bold tabular-nums text-white">{{ $counts['intellectual_property'] ?? 0 }}</span>
+                    <span class="text-[9px] sm:text-[10px] text-brand-200/80">Sertifikat</span>
                 </div>
 
-                <div class="rounded-lg border border-gold-400/40 bg-gold-400/20 p-2.5 text-center shadow-2xs">
-                    <span class="text-[10px] font-bold text-gold-300 uppercase tracking-wider">Total</span>
-                    <span class="mt-1 block text-xl font-extrabold tabular-nums text-gold-200">{{ $totalCounts }}</span>
-                    <span class="text-[10px] text-gold-300">Luaran</span>
+                <div class="rounded-lg border border-gold-400/40 bg-gold-400/20 p-2 sm:p-2.5 text-center shadow-2xs min-w-0">
+                    <span class="text-[9px] sm:text-[10px] font-bold text-gold-300 uppercase tracking-wider block truncate">Total</span>
+                    <span class="mt-1 block text-lg sm:text-xl font-extrabold tabular-nums text-gold-200">{{ $totalCounts }}</span>
+                    <span class="text-[9px] sm:text-[10px] text-gold-300">Luaran</span>
                 </div>
             </div>
         </div>
@@ -84,36 +84,36 @@
 
     {{-- Lecturer Personal Analytics --}}
     @if ($totalCounts > 0)
-        <section class="grid gap-5 lg:grid-cols-3" aria-label="Statistik Kinerja Dosen">
-            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs lg:col-span-2">
-                <div class="flex flex-wrap items-center justify-between gap-2 bg-[#7a0d0d] px-5 py-3 text-white">
-                    <div>
+        <section class="grid gap-5 lg:grid-cols-3 min-w-0 w-full" aria-label="Statistik Kinerja Dosen">
+            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs lg:col-span-2 min-w-0 w-full">
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-[#7a0d0d] px-4 py-3 sm:px-5 text-white">
+                    <div class="min-w-0">
                         <h2 class="text-sm font-bold tracking-tight">Tren Kinerja {{ $lecturer->name }}</h2>
-                        <p class="text-[11px] text-brand-100/90">Statistik data terverifikasi {{ $chart['labels'][0] }}–{{ $year }}</p>
+                        <p class="text-[11px] text-brand-100/90 truncate">Statistik data terverifikasi {{ $chart['labels'][0] }}–{{ $year }}</p>
                     </div>
-                    <span class="inline-flex items-center gap-1 rounded-md bg-white/15 px-2 py-0.5 text-xs font-semibold text-white border border-white/20">
+                    <span class="inline-flex items-center gap-1 rounded-md bg-white/15 px-2 py-0.5 text-xs font-semibold text-white border border-white/20 shrink-0">
                         <x-heroicon-o-chart-bar class="size-3.5" />
                         5 Tahun Terakhir
                     </span>
                 </div>
-                <div class="p-5">
-                    <div x-data="barChart(@js($chart))" class="h-56">
+                <div class="p-4 sm:p-5 min-w-0">
+                    <div x-data="barChart(@js($chart))" class="relative h-56 w-full min-w-0">
                         <canvas x-ref="canvas" role="img" aria-label="Grafik perbandingan capaian per tahun dosen"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs flex flex-col justify-between">
-                <div class="bg-[#7a0d0d] px-5 py-3 text-white">
+            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs flex flex-col justify-between min-w-0 w-full">
+                <div class="bg-[#7a0d0d] px-4 py-3 sm:px-5 text-white">
                     <h2 class="text-sm font-bold tracking-tight">Distribusi Tridharma Dosen</h2>
-                    <p class="text-[11px] text-brand-100/90">Proporsi seluruh karya terverifikasi</p>
+                    <p class="text-[11px] text-brand-100/90 truncate">Proporsi seluruh karya terverifikasi</p>
                 </div>
-                <div class="p-5 my-auto flex-1 flex flex-col justify-center">
-                    <div x-data="donutChart(@js($composition))" class="h-52 py-1">
+                <div class="p-4 sm:p-5 my-auto flex-1 flex flex-col justify-center min-w-0">
+                    <div x-data="donutChart(@js($composition))" class="relative h-52 w-full min-w-0 py-1">
                         <canvas x-ref="canvas" role="img" aria-label="Grafik proporsi kategori karya dosen"></canvas>
                     </div>
                 </div>
-                <div class="border-t border-line bg-canvas/40 px-5 py-3 flex items-center justify-between text-xs text-muted">
+                <div class="border-t border-line bg-canvas/40 px-4 py-3 sm:px-5 flex items-center justify-between text-xs text-muted">
                     <span>Total Capaian</span>
                     <span class="font-bold text-ink tabular-nums">{{ $totalCounts }} Karya</span>
                 </div>
@@ -122,9 +122,9 @@
     @endif
 
     {{-- Module Tabs & Filter Toolbar --}}
-    <section class="space-y-4">
+    <section class="space-y-4 min-w-0 w-full">
         {{-- Module Tabs (shadcn Segmented Control) --}}
-        <div class="overflow-x-auto rounded-xl border border-line bg-surface p-1.5 shadow-xs">
+        <div class="overflow-x-auto rounded-xl border border-line bg-surface p-1.5 shadow-xs min-w-0 w-full">
             <nav class="inline-flex max-w-full items-center gap-1 rounded-lg bg-slate-100/80 p-1 text-xs" aria-label="Modul Luaran">
                 @foreach ($modules as $alias => $item)
                     @php($isActive = $alias === $type)
@@ -149,7 +149,7 @@
         </div>
 
         {{-- Search & Filters in this Lecturer's Works --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs">
+        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs min-w-0 w-full">
             <form method="GET" action="{{ route('public.lecturers.show', $lecturer) }}" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-12 items-end">
                 <input type="hidden" name="modul" value="{{ $type }}">
 
