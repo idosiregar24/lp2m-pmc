@@ -433,4 +433,136 @@ class LecturerImportService
 
         return $tempPath;
     }
+
+    /**
+     * Preview lecturers from spreadsheet file (XLSX, XLS, CSV).
+     *
+     * @return array{
+     *     file_name: string,
+     *     file_size: string,
+     *     total_rows: int,
+     *     header_row: int,
+     *     columns: array<string, array{index: int, letter: string, name: string}>,
+     *     sample_rows: list<array{row_num: int, fakultas: string, prodi: string, nama: string, nidn: string, nuptk: string, valid: bool}>,
+     *     errors: list<string>
+     * }
+     */
+    public function preview(UploadedFile|string $file, int $maxRows = 6): array
+    {
+        $filePath = $file instanceof UploadedFile ? $file->getRealPath() : $file;
+        $fileName = $file instanceof UploadedFile ? $file->getClientOriginalName() : basename($file);
+        $fileSize = $file instanceof UploadedFile ? $file->getSize() : (file_exists($filePath) ? (int) filesize($filePath) : 0);
+
+        if (! file_exists($filePath)) {
+            throw new RuntimeException("File tidak ditemukan: {$filePath}");
+        }
+
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray(null, true, true, false);
+
+        if (empty($rows)) {
+            return [
+                'file_name' => $fileName,
+                'file_size' => $this->formatFileSize($fileSize),
+                'total_rows' => 0,
+                'header_row' => 1,
+                'columns' => [],
+                'sample_rows' => [],
+                'errors' => ['File spreadsheet kosong.'],
+            ];
+        }
+
+        $headerInfo = $this->resolveColumns($rows);
+        $headerRowIdx = $headerInfo['header_row_index'];
+        $colMap = $headerInfo['columns'];
+
+        $colLetter = fn (int $idx) => chr(65 + $idx);
+
+        $columns = [
+            'fakultas' => [
+                'index' => $colMap['fakultas'],
+                'letter' => $colLetter($colMap['fakultas']),
+                'name' => 'Fakultas',
+            ],
+            'prodi' => [
+                'index' => $colMap['prodi'],
+                'letter' => $colLetter($colMap['prodi']),
+                'name' => 'Program Studi',
+            ],
+            'nama' => [
+                'index' => $colMap['nama'],
+                'letter' => $colLetter($colMap['nama']),
+                'name' => 'Nama Dosen',
+            ],
+            'nidn' => [
+                'index' => $colMap['nidn'],
+                'letter' => $colLetter($colMap['nidn']),
+                'name' => 'NIDN',
+            ],
+            'nuptk' => [
+                'index' => $colMap['nuptk'],
+                'letter' => $colLetter($colMap['nuptk']),
+                'name' => 'NUPTK',
+            ],
+        ];
+
+        $sampleRows = [];
+        $totalRows = 0;
+        $errors = [];
+
+        for ($i = $headerRowIdx + 1; $i < count($rows); $i++) {
+            $row = $rows[$i];
+
+            $nama = trim((string) ($row[$colMap['nama']] ?? ''));
+            $fakultas = trim((string) ($row[$colMap['fakultas']] ?? ''));
+            $prodi = trim((string) ($row[$colMap['prodi']] ?? ''));
+            $nidn = trim((string) ($row[$colMap['nidn']] ?? ''));
+            $nuptk = trim((string) ($row[$colMap['nuptk']] ?? ''));
+
+            if ($nama === '' && $fakultas === '' && $prodi === '' && $nidn === '' && $nuptk === '') {
+                continue;
+            }
+
+            $totalRows++;
+
+            if (count($sampleRows) < $maxRows) {
+                $sampleRows[] = [
+                    'row_num' => $i + 1,
+                    'fakultas' => $fakultas,
+                    'prodi' => $prodi,
+                    'nama' => $nama,
+                    'nidn' => $nidn,
+                    'nuptk' => $nuptk,
+                    'valid' => ($nama !== '' && $nama !== '-'),
+                ];
+            }
+        }
+
+        if ($totalRows === 0) {
+            $errors[] = 'Tidak ditemukan baris data di dalam spreadsheet.';
+        }
+
+        return [
+            'file_name' => $fileName,
+            'file_size' => $this->formatFileSize($fileSize),
+            'total_rows' => $totalRows,
+            'header_row' => $headerRowIdx + 1,
+            'columns' => $columns,
+            'sample_rows' => $sampleRows,
+            'errors' => $errors,
+        ];
+    }
+
+    private function formatFileSize(int $bytes): string
+    {
+        if ($bytes <= 0) {
+            return '0 B';
+        }
+
+        $units = ['B', 'KB', 'MB', 'GB'];
+        $power = min((int) floor(log($bytes, 1024)), count($units) - 1);
+
+        return round($bytes / (1024 ** $power), 1) . ' ' . $units[$power];
+    }
 }

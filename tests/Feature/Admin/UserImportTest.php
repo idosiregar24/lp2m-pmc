@@ -138,3 +138,36 @@ it('runs the import lecturers artisan command', function () {
     @unlink($tempFile);
 });
 
+it('previews spreadsheet data via preview endpoint', function () {
+    $this->post(route('users.import.preview'))->assertRedirect(route('login'));
+    $this->actingAs(dosen())->post(route('users.import.preview'))->assertForbidden();
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->fromArray([
+        ['Fakultas', 'Prodi', 'Nama Dosen', 'NIDN', 'NUPTK'],
+        ['Kesehatan', 'Gizi', 'Dosen Pratama, S.Gz', '1019099001', '2251768669230001'],
+        ['Ekonomi', 'Bisnis Digital', 'Dosen Kedua, M.Kom', '1019099002', ''],
+    ]);
+
+    $tempFile = tempnam(sys_get_temp_dir(), 'test_preview_') . '.xlsx';
+    (new Xlsx($spreadsheet))->save($tempFile);
+
+    $uploadedFile = new UploadedFile($tempFile, 'data_dosen.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', null, true);
+
+    $response = $this->actingAs(admin())->postJson(route('users.import.preview'), [
+        'file' => $uploadedFile,
+    ]);
+
+    $response->assertOk()
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.file_name', 'data_dosen.xlsx')
+        ->assertJsonPath('data.total_rows', 2)
+        ->assertJsonPath('data.header_row', 1)
+        ->assertJsonPath('data.sample_rows.0.nama', 'Dosen Pratama, S.Gz')
+        ->assertJsonPath('data.columns.nama.letter', 'C');
+
+    @unlink($tempFile);
+});
+
+

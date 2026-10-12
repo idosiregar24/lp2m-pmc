@@ -13,6 +13,7 @@ use App\Services\LecturerImportService;
 use App\Services\UserService;
 use App\Support\Verifiable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -28,6 +29,33 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return view('users.import');
+    }
+
+    public function previewImport(Request $request, LecturerImportService $importService): JsonResponse
+    {
+        $this->authorize('create', User::class);
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:10240'],
+        ], [
+            'file.required' => 'Silakan pilih berkas spreadsheet (.xlsx, .xls, .csv).',
+            'file.mimes' => 'Format berkas harus berupa spreadsheet Excel (.xlsx, .xls) atau CSV.',
+            'file.max' => 'Ukuran berkas tidak boleh melebihi 10 MB.',
+        ]);
+
+        try {
+            $preview = $importService->preview($request->file('file'));
+
+            return response()->json([
+                'success' => true,
+                'data' => $preview,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membaca isi spreadsheet: '.$e->getMessage(),
+            ], 422);
+        }
     }
 
     public function processImport(Request $request, LecturerImportService $importService): RedirectResponse

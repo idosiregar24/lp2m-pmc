@@ -82,6 +82,7 @@ Route::middleware(['auth', 'active'])->group(function () {
             });
 
             Route::get('pengguna/impor', [UserController::class, 'importForm'])->name('users.import');
+            Route::post('pengguna/impor/preview', [UserController::class, 'previewImport'])->name('users.import.preview');
             Route::post('pengguna/impor', [UserController::class, 'processImport'])->name('users.import.process');
             Route::get('pengguna/template-excel', [UserController::class, 'downloadTemplate'])->name('users.import.template');
 
