@@ -4,7 +4,7 @@
     'flush' => false, // true = no body padding (tables)
 ])
 
-<section {{ $attributes->class('rounded-2xl border border-line bg-surface') }}>
+<section {{ $attributes->class('rounded-xl border border-line bg-surface shadow-xs') }}>
     @if ($title || isset($actions))
         <header class="flex flex-wrap items-start justify-between gap-3 border-b border-line px-5 py-4">
             <div class="min-w-0">

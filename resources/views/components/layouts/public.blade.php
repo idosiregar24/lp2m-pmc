@@ -18,19 +18,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-canvas text-ink antialiased">
-    <div class="h-1 bg-brand-700" aria-hidden="true"></div>
-
-    <header class="sticky top-0 z-30 border-b border-line bg-surface shadow-xs">
+    <header class="sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur shadow-2xs">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
             <a href="{{ route('public.lecturers.index') }}" class="flex min-w-0 items-center gap-3 transition hover:opacity-90">
                 <x-ui.logo size="md" />
                 <span class="min-w-0 leading-tight">
-                    <span class="block truncate text-base font-bold text-ink tracking-tight">LPPM Universitas PMC</span>
+                    <span class="flex items-center gap-2">
+                        <span class="truncate text-base font-bold text-ink tracking-tight">LPPM Universitas PMC</span>
+                        <span class="hidden rounded px-1.5 py-0.2 text-[9px] font-bold bg-brand-50 text-brand-700 border border-brand-200/70 sm:inline">PORTAL PUBLIK</span>
+                    </span>
                     <span class="block truncate text-xs text-muted">Lembaga Penelitian dan Pengabdian kepada Masyarakat</span>
                 </span>
             </a>
             <nav class="flex items-center gap-2.5" aria-label="Menu publik">
-                <a href="{{ route('public.lecturers.index') }}" class="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition hover:bg-canvas hover:text-ink sm:flex">
+                <a href="{{ route('public.lecturers.index') }}" class="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 sm:flex">
                     <x-heroicon-o-academic-cap class="size-4" />
                     Direktori Dosen
                 </a>

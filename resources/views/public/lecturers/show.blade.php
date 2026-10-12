@@ -1,116 +1,119 @@
 <x-layouts.public :title="$lecturer->name">
     {{-- Breadcrumbs --}}
     <nav class="flex items-center gap-1.5 text-xs text-muted" aria-label="Breadcrumb">
-        <a href="{{ route('public.lecturers.index') }}" class="transition hover:text-ink">Direktori Dosen</a>
+        <a href="{{ route('public.lecturers.index') }}" class="transition hover:text-brand-700">Direktori Dosen</a>
         <x-heroicon-o-chevron-right class="size-3 text-muted/60" aria-hidden="true" />
         <span class="truncate font-semibold text-ink" aria-current="page">{{ $lecturer->name }}</span>
     </nav>
 
-    {{-- Lecturer Profile Hero Card (Preskool ERP Profile Banner) --}}
-    <section class="rounded-xl border border-slate-800 bg-slate-900 p-5 text-white shadow-xs sm:p-6">
+    {{-- Lecturer Profile Hero Card (PMC Institutional Crimson Theme) --}}
+    <section class="overflow-hidden rounded-2xl border border-[#630909] bg-gradient-to-br from-[#7a0d0d] via-[#660909] to-[#4f0606] p-6 text-white shadow-xs sm:p-7">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             {{-- Profile info --}}
             <div class="flex items-start gap-4">
-                <span class="flex size-16 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-brand-700 text-xl font-bold text-white shadow-xs">
+                <span class="flex size-16 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-xl font-extrabold text-white shadow-xs">
                     {{ $lecturer->initials() }}
                 </span>
                 <div class="min-w-0">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center rounded bg-brand-500/20 px-2 py-0.5 text-[11px] font-semibold text-brand-300 border border-brand-500/30">
-                            #DOSEN-PMC
+                        <span class="inline-flex items-center rounded-md bg-gold-400 px-2 py-0.5 text-[10px] font-bold text-gold-950 shadow-2xs">
+                            DOSEN PMC
                         </span>
-                        <span class="inline-flex items-center gap-1 rounded bg-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-300 border border-emerald-500/30">
-                            <span class="size-1.5 rounded-full bg-emerald-400"></span>
-                            Dosen Aktif
+                        <span class="inline-flex items-center rounded-md bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white border border-white/20">
+                            Status Aktif
                         </span>
-                        <span class="text-xs text-slate-400">
+                        <span class="text-xs text-brand-200">
                             Universitas Pekanbaru Medical Center
                         </span>
                     </div>
 
-                    <h1 class="mt-1.5 text-xl font-bold tracking-tight text-white sm:text-2xl">
+                    <h1 class="mt-1.5 text-xl font-extrabold tracking-tight text-white sm:text-2xl">
                         {{ $lecturer->name }}
                     </h1>
 
-                    <p class="mt-0.5 text-xs text-slate-300">
+                    <p class="mt-0.5 text-xs text-brand-100/90">
                         {{ $lecturer->studyProgram?->displayName() ?? 'Program Studi' }}
                         @if ($lecturer->studyProgram?->faculty)
-                            <span class="text-slate-600 mx-1">|</span>
-                            <span class="text-slate-200">{{ $lecturer->studyProgram->faculty->name }}</span>
+                            <span class="text-white/40 mx-1">|</span>
+                            <span class="text-white font-medium">{{ $lecturer->studyProgram->faculty->name }}</span>
                         @endif
                     </p>
                 </div>
             </div>
 
-            {{-- Stat KPI Boxes (Preskool Metric Boxes) --}}
+            {{-- Stat KPI Boxes --}}
             <div class="grid grid-cols-3 gap-2 sm:grid-cols-6 lg:min-w-[32rem]">
-                <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 text-center">
-                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Penelitian</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
+                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Penelitian</span>
                     <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['research'] ?? 0 }}</span>
-                    <span class="text-[10px] text-slate-400">Karya</span>
+                    <span class="text-[10px] text-brand-200/80">Karya</span>
                 </div>
 
-                <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 text-center">
-                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Pengabdian</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
+                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Pengabdian</span>
                     <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['community_service'] ?? 0 }}</span>
-                    <span class="text-[10px] text-slate-400">Kegiatan</span>
+                    <span class="text-[10px] text-brand-200/80">Kegiatan</span>
                 </div>
 
-                <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 text-center">
-                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Publikasi</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
+                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Publikasi</span>
                     <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['publication'] ?? 0 }}</span>
-                    <span class="text-[10px] text-slate-400">Artikel</span>
+                    <span class="text-[10px] text-brand-200/80">Artikel</span>
                 </div>
 
-                <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 text-center">
-                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Buku</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
+                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">Buku</span>
                     <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['book'] ?? 0 }}</span>
-                    <span class="text-[10px] text-slate-400">Judul</span>
+                    <span class="text-[10px] text-brand-200/80">Judul</span>
                 </div>
 
-                <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 text-center">
-                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">HKI</span>
+                <div class="rounded-lg border border-white/15 bg-white/10 p-2.5 text-center shadow-2xs">
+                    <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-wider">HKI</span>
                     <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $counts['intellectual_property'] ?? 0 }}</span>
-                    <span class="text-[10px] text-slate-400">Sertifikat</span>
+                    <span class="text-[10px] text-brand-200/80">Sertifikat</span>
                 </div>
 
-                <div class="rounded-lg border border-brand-500/30 bg-brand-900/40 p-2.5 text-center">
-                    <span class="text-[10px] font-semibold text-brand-300 uppercase tracking-wider">Total</span>
-                    <span class="mt-1 block text-xl font-bold tabular-nums text-white">{{ $totalCounts }}</span>
-                    <span class="text-[10px] text-brand-300">Luaran</span>
+                <div class="rounded-lg border border-gold-400/40 bg-gold-400/20 p-2.5 text-center shadow-2xs">
+                    <span class="text-[10px] font-bold text-gold-300 uppercase tracking-wider">Total</span>
+                    <span class="mt-1 block text-xl font-extrabold tabular-nums text-gold-200">{{ $totalCounts }}</span>
+                    <span class="text-[10px] text-gold-300">Luaran</span>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- Lecturer Personal Analytics (Preskool Performance Charts) --}}
+    {{-- Lecturer Personal Analytics --}}
     @if ($totalCounts > 0)
-        <section class="grid gap-4 lg:grid-cols-3" aria-label="Statistik Kinerja Dosen">
-            <div class="rounded-xl border border-line bg-surface p-5 shadow-2xs lg:col-span-2">
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+        <section class="grid gap-5 lg:grid-cols-3" aria-label="Statistik Kinerja Dosen">
+            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs lg:col-span-2">
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-[#7a0d0d] px-5 py-3 text-white">
                     <div>
-                        <h2 class="text-sm font-bold text-ink">Tren Kinerja {{ $lecturer->name }}</h2>
-                        <p class="text-xs text-muted">Statistik data terverifikasi 5 tahun terakhir ({{ $chart['labels'][0] }}–{{ $year }})</p>
+                        <h2 class="text-sm font-bold tracking-tight">Tren Kinerja {{ $lecturer->name }}</h2>
+                        <p class="text-[11px] text-brand-100/90">Statistik data terverifikasi {{ $chart['labels'][0] }}–{{ $year }}</p>
                     </div>
-                    <span class="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700 border border-brand-200">
+                    <span class="inline-flex items-center gap-1 rounded-md bg-white/15 px-2 py-0.5 text-xs font-semibold text-white border border-white/20">
                         <x-heroicon-o-chart-bar class="size-3.5" />
                         5 Tahun Terakhir
                     </span>
                 </div>
-                <div x-data="barChart(@js($chart))" class="mt-4 h-56">
-                    <canvas x-ref="canvas" role="img" aria-label="Grafik perbandingan capaian per tahun dosen"></canvas>
+                <div class="p-5">
+                    <div x-data="barChart(@js($chart))" class="h-56">
+                        <canvas x-ref="canvas" role="img" aria-label="Grafik perbandingan capaian per tahun dosen"></canvas>
+                    </div>
                 </div>
             </div>
 
-            <div class="rounded-xl border border-line bg-surface p-5 shadow-2xs flex flex-col justify-between">
-                <div class="border-b border-line pb-3">
-                    <h2 class="text-sm font-bold text-ink">Distribusi Tridharma Dosen</h2>
-                    <p class="text-xs text-muted">Proporsi seluruh karya terverifikasi</p>
+            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs flex flex-col justify-between">
+                <div class="bg-[#7a0d0d] px-5 py-3 text-white">
+                    <h2 class="text-sm font-bold tracking-tight">Distribusi Tridharma Dosen</h2>
+                    <p class="text-[11px] text-brand-100/90">Proporsi seluruh karya terverifikasi</p>
                 </div>
-                <div x-data="donutChart(@js($composition))" class="my-auto h-56 py-2">
-                    <canvas x-ref="canvas" role="img" aria-label="Grafik proporsi kategori karya dosen"></canvas>
+                <div class="p-5 my-auto flex-1 flex flex-col justify-center">
+                    <div x-data="donutChart(@js($composition))" class="h-52 py-1">
+                        <canvas x-ref="canvas" role="img" aria-label="Grafik proporsi kategori karya dosen"></canvas>
+                    </div>
                 </div>
-                <div class="border-t border-line pt-3 flex items-center justify-between text-xs text-muted">
+                <div class="border-t border-line bg-canvas/40 px-5 py-3 flex items-center justify-between text-xs text-muted">
                     <span>Total Capaian</span>
                     <span class="font-bold text-ink tabular-nums">{{ $totalCounts }} Karya</span>
                 </div>
@@ -120,23 +123,23 @@
 
     {{-- Module Tabs & Filter Toolbar --}}
     <section class="space-y-4">
-        {{-- Module Tabs (Preskool Clean Underline Tabs) --}}
-        <div class="border-b border-line bg-surface rounded-t-xl px-2">
-            <nav class="-mb-px flex flex-wrap gap-2" aria-label="Modul Luaran">
+        {{-- Module Tabs (shadcn Segmented Control) --}}
+        <div class="overflow-x-auto rounded-xl border border-line bg-surface p-1.5 shadow-xs">
+            <nav class="inline-flex max-w-full items-center gap-1 rounded-lg bg-slate-100/80 p-1 text-xs" aria-label="Modul Luaran">
                 @foreach ($modules as $alias => $item)
                     @php($isActive = $alias === $type)
                     <a href="{{ route('public.lecturers.show', array_merge($filters, ['lecturer' => $lecturer, 'modul' => $alias])) }}"
                         @class([
-                            'inline-flex items-center gap-2 border-b-2 px-3.5 py-3 text-xs font-semibold transition',
-                            'border-brand-700 text-brand-700' => $isActive,
-                            'border-transparent text-muted hover:border-line hover:text-ink' => ! $isActive,
+                            'inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-1.5 text-xs font-medium transition-colors',
+                            'border border-brand-200/70 bg-surface font-semibold text-brand-700 shadow-xs' => $isActive,
+                            'border border-transparent text-slate-600 hover:bg-surface/60 hover:text-brand-700' => ! $isActive,
                         ])>
-                        <x-dynamic-component :component="$item['icon']" class="size-4" />
+                        <x-dynamic-component :component="$item['icon']" class="size-3.5" />
                         <span>{{ $item['label'] }}</span>
                         <span @class([
-                            'rounded px-1.5 py-0.5 text-[10px] tabular-nums font-bold',
-                            'bg-brand-50 text-brand-700 border border-brand-200' => $isActive,
-                            'bg-canvas text-muted border border-line' => ! $isActive,
+                            'rounded-full px-1.5 py-0.2 text-[10px] font-bold tabular-nums leading-none',
+                            'bg-brand-100 text-brand-800 border border-brand-200/70' => $isActive,
+                            'bg-slate-200 text-slate-600' => ! $isActive,
                         ])>
                             {{ $counts[$alias] ?? 0 }}
                         </span>
@@ -146,7 +149,7 @@
         </div>
 
         {{-- Search & Filters in this Lecturer's Works --}}
-        <div class="rounded-xl border border-line bg-surface p-4 shadow-2xs">
+        <div class="rounded-xl border border-line bg-surface p-4 shadow-xs">
             <form method="GET" action="{{ route('public.lecturers.show', $lecturer) }}" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-12 items-end">
                 <input type="hidden" name="modul" value="{{ $type }}">
 
@@ -159,7 +162,7 @@
                         </div>
                         <input type="search" name="q" id="q" value="{{ $filters['q'] ?? '' }}"
                             placeholder="Cari judul {{ strtolower($module['label']) }}..."
-                            class="block w-full rounded-lg border border-line bg-surface py-2 pl-9 pr-3 text-sm text-ink placeholder:text-muted/60 focus:border-brand-600 focus:outline-none focus:ring-1 focus:ring-brand-600" />
+                            class="block w-full rounded-lg border border-line bg-surface py-2 pl-9 pr-3 text-xs text-ink placeholder:text-muted/60 focus:border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-600/10" />
                     </div>
                 </div>
 
@@ -168,7 +171,7 @@
                     <x-form.label for="year" class="text-xs font-semibold text-muted">Tahun</x-form.label>
                     <div class="mt-1">
                         <select name="year" id="year"
-                            class="block w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus:border-brand-600 focus:outline-none focus:ring-1 focus:ring-brand-600">
+                            class="block w-full rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink focus:border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-600/10">
                             <option value="">Semua Tahun</option>
                             @foreach ($years as $y)
                                 <option value="{{ $y }}" @selected(($filters['year'] ?? '') == $y)>{{ $y }}</option>
@@ -182,7 +185,7 @@
                     <x-form.label for="role" class="text-xs font-semibold text-muted">Peran Dosen</x-form.label>
                     <div class="mt-1">
                         <select name="role" id="role"
-                            class="block w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus:border-brand-600 focus:outline-none focus:ring-1 focus:ring-brand-600">
+                            class="block w-full rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink focus:border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-600/10">
                             <option value="">Semua Peran</option>
                             <option value="lead" @selected(($filters['role'] ?? '') === 'lead')>Ketua / Penulis Pertama</option>
                             <option value="member" @selected(($filters['role'] ?? '') === 'member')>Anggota / Tim</option>
@@ -193,13 +196,13 @@
                 {{-- Submit & Reset Buttons --}}
                 <div class="flex items-center gap-2 sm:col-span-2 lg:col-span-2">
                     <button type="submit"
-                        class="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-xs transition hover:bg-brand-800">
-                        <x-heroicon-o-magnifying-glass class="size-4" />
+                        class="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#7a0d0d] px-4 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-brand-700 active:scale-[0.98]">
+                        <x-heroicon-o-funnel class="size-3.5" />
                         <span>Filter</span>
                     </button>
                     @if (isset($filters['q']) || isset($filters['year']) || isset($filters['role']))
                         <a href="{{ route('public.lecturers.show', ['lecturer' => $lecturer, 'modul' => $type]) }}"
-                            class="flex size-9.5 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:bg-canvas hover:text-ink transition"
+                            class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:bg-canvas hover:text-ink transition"
                             title="Reset Filter">
                             <x-heroicon-o-arrow-path class="size-4" />
                         </a>
@@ -211,12 +214,12 @@
 
     {{-- Records List --}}
     @if ($records->isEmpty())
-        <div class="rounded-xl border border-line bg-surface p-12 text-center shadow-2xs">
+        <div class="rounded-xl border border-line bg-surface p-12 text-center shadow-xs">
             <div class="mx-auto flex size-12 items-center justify-center rounded-xl bg-canvas text-muted">
                 <x-dynamic-component :component="$module['icon']" class="size-6" />
             </div>
             <h3 class="mt-4 text-base font-semibold text-ink">Tidak ada data {{ strtolower($module['label']) }} ditemukan</h3>
-            <p class="mt-1 text-sm text-muted">
+            <p class="mt-1 text-xs text-muted">
                 @if (isset($filters['q']) || isset($filters['year']) || isset($filters['role']))
                     Tidak ada luaran yang cocok dengan kriteria pencarian dan filter Anda.
                 @else
@@ -245,7 +248,7 @@
                 @foreach ($records as $record)
                     @php($myContribution = $record->contributors->firstWhere('user_id', $lecturer->id))
                     @php($isLead = $myContribution && $myContribution->sort_order === 1)
-                    <li class="rounded-xl border border-line bg-surface p-4.5 shadow-2xs transition hover:border-brand-300 hover:shadow-xs">
+                    <li class="rounded-xl border border-line bg-surface p-4.5 shadow-xs transition hover:border-brand-200/90 hover:shadow-sm">
                         <div class="flex flex-wrap items-start justify-between gap-3">
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="inline-flex items-center gap-1 rounded bg-canvas border border-line px-2 py-0.5 text-xs font-semibold tabular-nums text-ink">
@@ -254,7 +257,7 @@
                                 </span>
 
                                 @if ($isLead)
-                                    <span class="inline-flex items-center rounded border border-brand-200 bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
+                                    <span class="inline-flex items-center rounded border border-brand-200/80 bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
                                         Ketua / Penulis Pertama
                                     </span>
                                 @else
@@ -277,7 +280,7 @@
 
                         {{-- Metadata Summary (Scheme, Funding, Publisher, etc.) --}}
                         @if ($summary = $record->publicSummary())
-                            <p class="mt-1.5 text-xs leading-relaxed text-muted bg-canvas rounded-lg px-2.5 py-1.5 border border-line">
+                            <p class="mt-1.5 text-xs leading-relaxed text-muted bg-canvas/70 rounded-lg px-2.5 py-1.5 border border-line">
                                 {{ $summary }}
                             </p>
                         @endif
@@ -288,7 +291,7 @@
                             @foreach ($record->contributors as $contributor)
                                 <span @class([
                                     'inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs',
-                                    'bg-brand-50 text-brand-700 font-semibold border border-brand-200' => $contributor->user_id === $lecturer->id,
+                                    'bg-brand-50 text-brand-700 font-semibold border border-brand-200/70' => $contributor->user_id === $lecturer->id,
                                     'bg-canvas text-ink border border-line' => $contributor->user_id !== $lecturer->id,
                                 ])>
                                     @if ($contributor->user?->isDosen() && $contributor->user->is_active)

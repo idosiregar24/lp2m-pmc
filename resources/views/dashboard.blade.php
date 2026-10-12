@@ -1,202 +1,241 @@
 @php($isAdmin = auth()->user()->isAdmin())
 
 <x-layouts.app title="Dashboard">
-    {{-- Preskool-style Profile Banner & KPI Cards --}}
-    <section class="grid gap-4 lg:grid-cols-12 items-stretch">
-        <div class="rounded-xl border border-slate-800 bg-slate-900 p-5 text-white shadow-xs lg:col-span-8 flex flex-col justify-between">
-            <div class="flex flex-wrap items-center gap-4">
-                <span class="flex size-14 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-brand-700 text-xl font-bold text-white shadow-xs">
-                    {{ auth()->user()->initials() }}
-                </span>
-                <div class="min-w-0 flex-1">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center rounded bg-brand-500/20 px-2 py-0.5 text-[11px] font-semibold text-brand-300 border border-brand-500/30">
-                            #{{ strtoupper(auth()->user()->role->value) }}
-                        </span>
-                        <span class="text-xs text-slate-400">LPPM Universitas PMC</span>
-                    </div>
-                    <h1 class="mt-1 text-xl font-bold tracking-tight text-white sm:text-2xl">
-                        {{ auth()->user()->name }}
-                    </h1>
-                    <p class="text-xs text-slate-300">
-                        {{ $isAdmin ? 'Administrator Sistem LPPM · Verifikasi & Manajemen Data' : (auth()->user()->studyProgram?->displayName() ?? 'Dosen Universitas Pekanbaru Medical Center') }}
-                    </p>
-                </div>
+    {{-- PCR-Inspired 4 Hub Action Cards --}}
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {{-- Card 1: Pencarian --}}
+        <div class="flex flex-col justify-between overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition hover:border-brand-300">
+            <div class="flex items-center gap-2 bg-[#7a0d0d] px-4 py-2.5 text-white">
+                <x-heroicon-o-magnifying-glass class="size-4 shrink-0" />
+                <span class="text-xs font-bold uppercase tracking-wider">Pencarian</span>
             </div>
-
-            <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-800 pt-3 text-xs">
-                @if ($isAdmin)
-                    <a href="{{ route('verifications.index') }}"
-                        class="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3 py-1.5 font-semibold text-white hover:bg-brand-800 transition">
-                        <x-heroicon-o-check-circle class="size-4" />
-                        <span>Pemeriksaan Verifikasi ({{ $pendingCount }})</span>
-                    </a>
-                    <a href="{{ route('reports.index') }}"
-                        class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 hover:bg-slate-700 transition">
-                        <x-heroicon-o-table-cells class="size-4" />
-                        <span>Rekapitulasi Kinerja</span>
-                    </a>
-                @else
-                    <a href="{{ route('researches.create') }}"
-                        class="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3 py-1.5 font-semibold text-white hover:bg-brand-800 transition">
-                        <x-heroicon-o-plus class="size-4" />
-                        <span>Tambah Penelitian</span>
-                    </a>
-                    <a href="{{ route('community-services.create') }}"
-                        class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 font-semibold text-slate-200 hover:bg-slate-700 transition">
-                        <x-heroicon-o-plus class="size-4" />
-                        <span>Tambah Pengabdian</span>
-                    </a>
-                @endif
-                <a href="{{ route('public.lecturers.index') }}"
-                    class="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 font-semibold text-slate-300 transition hover:bg-slate-700 hover:text-white">
-                    <x-heroicon-o-arrow-top-right-on-square class="size-3.5" />
-                    <span>Portal Publik</span>
-                </a>
+            <div class="flex flex-1 flex-col justify-between space-y-3 p-4">
+                <p class="text-xs leading-relaxed text-muted">Data Penelitian, Pengabdian kepada Masyarakat dan Publikasi Ilmiah tiap Dosen</p>
+                <form method="GET" action="{{ route('researches.index') }}" class="flex gap-1.5 pt-1">
+                    <input type="text" name="q" placeholder="Tulis Inisial / Judul..." class="min-w-0 flex-1 rounded-lg border border-line bg-canvas px-2.5 py-1.5 text-xs text-ink placeholder:text-muted/70 focus:border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-600/10">
+                    <button type="submit" class="rounded-lg bg-[#7a0d0d] px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition active:scale-[0.98]">Cari</button>
+                </form>
             </div>
         </div>
 
-        {{-- Quick status widget / cards (Preskool Leaves Boxes style) --}}
-        <div class="grid grid-cols-2 gap-3 lg:col-span-4">
-            @if ($isAdmin)
-                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-muted">Antrean Verifikasi</span>
-                        <div class="flex size-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
-                            <x-heroicon-o-clock class="size-4.5" />
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="text-2xl font-bold tabular-nums text-ink">{{ $pendingCount }}</span>
-                        <p class="text-[11px] text-muted">Perlu ditinjau LPPM</p>
-                    </div>
+        {{-- Card 2: Capaian --}}
+        <div class="flex flex-col justify-between overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition hover:border-brand-300">
+            <div class="flex items-center justify-between bg-[#7a0d0d] px-4 py-2.5 text-white">
+                <div class="flex items-center gap-2">
+                    <x-heroicon-o-clipboard-document-check class="size-4 shrink-0" />
+                    <span class="text-xs font-bold uppercase tracking-wider">Capaian</span>
                 </div>
-                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-muted">Tahun Akademik</span>
-                        <div class="flex size-9 items-center justify-center rounded-lg bg-navy-50 text-navy-700">
-                            <x-heroicon-o-calendar class="size-4.5" />
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="text-2xl font-bold tabular-nums text-ink">{{ $year }}</span>
-                        <p class="text-[11px] text-muted">Tahun Berjalan</p>
-                    </div>
+                @if ($isAdmin && $pendingCount > 0)
+                    <span class="rounded-full bg-gold-400 px-2 py-0.2 text-[10px] font-bold text-gold-950 shadow-2xs">{{ $pendingCount }}</span>
+                @endif
+            </div>
+            <div class="flex flex-1 flex-col justify-between space-y-3 p-4">
+                <p class="text-xs leading-relaxed text-muted">Capaian Penelitian, Pengabdian kepada Masyarakat dan Publikasi Ilmiah Dosen setiap Tahun</p>
+                <div class="pt-1">
+                    <a href="{{ $isAdmin ? route('verifications.index') : route('researches.index') }}" class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-line bg-canvas px-3 py-1.5 text-xs font-semibold text-ink shadow-2xs transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 active:scale-[0.98]">
+                        <x-heroicon-o-calendar class="size-3.5" />
+                        Capaian Tahun
+                    </a>
                 </div>
-            @else
-                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-muted">Perlu Revisi</span>
-                        <div class="flex size-9 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
-                            <x-heroicon-o-exclamation-triangle class="size-4.5" />
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="text-2xl font-bold tabular-nums text-ink">{{ $needsRevision->count() }}</span>
-                        <p class="text-[11px] text-muted">Dikembalikan verifikator</p>
-                    </div>
+            </div>
+        </div>
+
+        {{-- Card 3: Statistik --}}
+        <div class="flex flex-col justify-between overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition hover:border-brand-300">
+            <div class="flex items-center gap-2 bg-[#7a0d0d] px-4 py-2.5 text-white">
+                <x-heroicon-o-chart-bar class="size-4 shrink-0" />
+                <span class="text-xs font-bold uppercase tracking-wider">Statistik</span>
+            </div>
+            <div class="flex flex-1 flex-col justify-between space-y-3 p-4">
+                <p class="text-xs leading-relaxed text-muted">Statistik keseluruhan berdasarkan data Bagian Penelitian dan Pengabdian Masyarakat</p>
+                <div class="pt-1">
+                    <a href="{{ route('reports.index') }}" class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-line bg-canvas px-3 py-1.5 text-xs font-semibold text-ink shadow-2xs transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 active:scale-[0.98]">
+                        <x-heroicon-o-table-cells class="size-3.5" />
+                        Statistik
+                    </a>
                 </div>
-                <div class="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 shadow-2xs">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-muted">Karya Terverifikasi</span>
-                        <div class="flex size-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                            <x-heroicon-o-check-badge class="size-4.5" />
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="text-2xl font-bold tabular-nums text-ink">{{ array_sum($composition['data']) }}</span>
-                        <p class="text-[11px] text-muted">Total seluruh modul</p>
-                    </div>
+            </div>
+        </div>
+
+        {{-- Card 4: Kinerja Dosen --}}
+        <div class="flex flex-col justify-between overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition hover:border-brand-300">
+            <div class="flex items-center gap-2 bg-[#7a0d0d] px-4 py-2.5 text-white">
+                <x-heroicon-o-user class="size-4 shrink-0" />
+                <span class="text-xs font-bold uppercase tracking-wider">Kinerja Dosen</span>
+            </div>
+            <div class="flex flex-1 flex-col justify-between space-y-3 p-4">
+                <p class="text-xs leading-relaxed text-muted">Halaman kinerja dosen menurut periode waktu tertentu. Klik untuk melihat detail informasi</p>
+                <div class="pt-1">
+                    <a href="{{ route('public.lecturers.index') }}" class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-line bg-canvas px-3 py-1.5 text-xs font-semibold text-ink shadow-2xs transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700 active:scale-[0.98]">
+                        <x-heroicon-o-arrow-top-right-on-square class="size-3.5" />
+                        Kinerja
+                    </a>
                 </div>
-            @endif
+            </div>
         </div>
     </section>
 
-    {{-- Charts first, in a grid: trend (wide) + composition, workload (wide) + action list --}}
-    <div class="grid gap-4 lg:grid-cols-3">
-        <x-ui.card :title="'Tren data terverifikasi'" :description="$chart['labels'][0].'–'.$year.', per modul'" class="lg:col-span-2">
-            <div x-data="barChart(@js($chart))" class="h-64">
-                <canvas x-ref="canvas" role="img" aria-label="Grafik jumlah data terverifikasi per tahun untuk setiap modul"></canvas>
-            </div>
-            <details class="mt-3 text-sm">
-                <summary class="cursor-pointer text-muted hover:text-ink">Lihat angka</summary>
-                <x-ui.table class="mt-3">
-                    <x-slot:head>
-                        <tr>
-                            <th>Modul</th>
-                            @foreach ($chart['labels'] as $label)
-                                <th class="text-right">{{ $label }}</th>
-                            @endforeach
-                        </tr>
-                    </x-slot:head>
-                    @foreach ($chart['series'] as $series)
-                        <tr>
-                            <td>{{ $series['label'] }}</td>
-                            @foreach ($series['data'] as $value)
-                                <td class="text-right tabular-nums">{{ $value }}</td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                </x-ui.table>
-            </details>
-        </x-ui.card>
+    {{-- Overall Statistics Header & Analytics Section (PCR Overall Statistics Style) --}}
+    <div class="grid gap-5 lg:grid-cols-12 items-start">
+        {{-- Left Column: User Summary & KPI Status Panel --}}
+        <div class="space-y-4 lg:col-span-4">
+            {{-- Profile Card --}}
+            <div class="rounded-xl border border-brand-200/80 bg-gradient-to-br from-brand-50/70 via-surface to-brand-50/20 p-5 shadow-xs">
+                <div class="flex items-center gap-3.5">
+                    <span class="flex size-12 shrink-0 items-center justify-center rounded-xl border border-brand-200/80 bg-brand-50 text-lg font-bold text-brand-700 shadow-2xs">
+                        {{ auth()->user()->initials() }}
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <span class="inline-flex items-center rounded-md bg-brand-100 px-2 py-0.5 text-[10px] font-semibold text-brand-800 border border-brand-200/70">
+                            {{ strtoupper(auth()->user()->role->value) }}
+                        </span>
+                        <h2 class="truncate text-base font-bold text-ink">{{ auth()->user()->name }}</h2>
+                        <p class="truncate text-xs text-muted">{{ $isAdmin ? 'LPPM Universitas PMC' : (auth()->user()->studyProgram?->displayName() ?? 'Dosen PMC') }}</p>
+                    </div>
+                </div>
 
-        <x-ui.card title="Komposisi per modul" description="Total data terverifikasi">
-            @if (array_sum($composition['data']) > 0)
-                <div x-data="donutChart(@js($composition))" class="h-64">
-                    <canvas x-ref="canvas" role="img" aria-label="Grafik komposisi data terverifikasi per modul: {{ collect($composition['labels'])->zip($composition['data'])->map(fn ($pair) => $pair[0].' '.$pair[1])->implode(', ') }}"></canvas>
+                <div class="mt-4 grid grid-cols-2 gap-2 border-t border-brand-200/50 pt-3">
+                    <div class="rounded-lg border border-brand-200/70 bg-surface p-2.5 shadow-2xs">
+                        <span class="text-[11px] font-medium text-muted block">Tahun Aktif</span>
+                        <span class="text-lg font-bold text-ink tabular-nums">{{ $year }}</span>
+                    </div>
+                    <div class="rounded-lg border border-brand-200/70 bg-surface p-2.5 shadow-2xs">
+                        <span class="text-[11px] font-medium text-muted block">{{ $isAdmin ? 'Antrean' : 'Revisi' }}</span>
+                        <span class="text-lg font-bold text-brand-700 tabular-nums">{{ $isAdmin ? $pendingCount : $needsRevision->count() }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-3 flex flex-wrap gap-2 pt-1 text-xs">
+                    @if ($isAdmin)
+                        <a href="{{ route('verifications.index') }}" class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#7a0d0d] px-3 py-1.5 font-semibold text-white shadow-xs hover:bg-brand-700 transition">
+                            <x-heroicon-o-check-circle class="size-3.5" />
+                            Verifikasi ({{ $pendingCount }})
+                        </a>
+                    @else
+                        <a href="{{ route('researches.create') }}" class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#7a0d0d] px-3 py-1.5 font-semibold text-white shadow-xs hover:bg-brand-700 transition">
+                            <x-heroicon-o-plus class="size-3.5" />
+                            Tambah Data
+                        </a>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Action List (Queue / Need Revision) --}}
+            @if ($isAdmin)
+                <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+                    <div class="flex items-center justify-between border-b border-line bg-canvas/40 px-4 py-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Menunggu Verifikasi</span>
+                        <a href="{{ route('verifications.index') }}" class="text-xs font-medium text-brand-700 hover:underline">Semua</a>
+                    </div>
+                    @if ($pending->isEmpty())
+                        <p class="p-4 text-center text-xs text-muted">Semua data telah diperiksa.</p>
+                    @else
+                        <ul class="divide-y divide-line">
+                            @foreach ($pending->take(5) as $item)
+                                <li class="p-3 transition hover:bg-slate-50/60">
+                                    <a href="{{ $item['url'] }}" class="line-clamp-1 text-xs font-medium text-ink transition hover:text-brand-700">{{ $item['title'] }}</a>
+                                    <p class="mt-0.5 text-[11px] text-muted">{{ $item['module'] }} · {{ $item['year'] }}</p>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
             @else
-                <p class="flex h-64 items-center justify-center text-sm text-muted">Belum ada data terverifikasi.</p>
+                <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+                    <div class="border-b border-line bg-canvas/40 px-4 py-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Perlu Revisi</span>
+                    </div>
+                    @if ($needsRevision->isEmpty())
+                        <p class="p-4 text-center text-xs text-muted">Tidak ada data yang perlu direvisi.</p>
+                    @else
+                        <ul class="divide-y divide-line">
+                            @foreach ($needsRevision->take(5) as $item)
+                                <li class="p-3 transition hover:bg-slate-50/60">
+                                    <a href="{{ $item['url'] }}" class="line-clamp-1 text-xs font-medium text-ink transition hover:text-brand-700">{{ $item['title'] }}</a>
+                                    <p class="mt-0.5 text-[11px] text-muted">{{ $item['module'] }} · {{ $item['year'] }}</p>
+                                    @if ($item['note'])
+                                        <p class="mt-1 line-clamp-1 text-[11px] text-warning-ink">{{ $item['note'] }}</p>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
             @endif
-        </x-ui.card>
+        </div>
 
-        <x-ui.card title="Status data per modul" description="Semua status, termasuk yang belum diverifikasi" class="lg:col-span-2">
-            <div x-data="barChart({ ...@js($statusChart), stacked: true, horizontal: true })" class="h-72">
-                <canvas x-ref="canvas" role="img" aria-label="Grafik jumlah data per status untuk setiap modul"></canvas>
+        {{-- Right Column: Main Charts (PCR Style Cards with Colored Header Bar) --}}
+        <div class="space-y-5 lg:col-span-8">
+            {{-- Main Chart: Total Penelitian, Pengabdian, Publikasi dan HKI --}}
+            <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-[#7a0d0d] px-5 py-3 text-white">
+                    <div>
+                        <h2 class="text-sm font-bold tracking-tight">Total Penelitian, Pengabdian, Publikasi dan HKI</h2>
+                        <p class="text-[11px] text-brand-100/90">Tren data terverifikasi {{ $chart['labels'][0] }}–{{ $year }} per modul</p>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div x-data="barChart(@js($chart))" class="h-64">
+                        <canvas x-ref="canvas" role="img" aria-label="Grafik jumlah data terverifikasi per tahun"></canvas>
+                    </div>
+                    <details class="mt-3 text-xs">
+                        <summary class="cursor-pointer font-medium text-muted hover:text-brand-700">Lihat rincian tabel angka</summary>
+                        <x-ui.table class="mt-3">
+                            <x-slot:head>
+                                <tr>
+                                    <th>Modul</th>
+                                    @foreach ($chart['labels'] as $label)
+                                        <th class="text-right">{{ $label }}</th>
+                                    @endforeach
+                                </tr>
+                            </x-slot:head>
+                            @foreach ($chart['series'] as $series)
+                                <tr>
+                                    <td class="font-medium text-ink">{{ $series['label'] }}</td>
+                                    @foreach ($series['data'] as $value)
+                                        <td class="text-right tabular-nums">{{ $value }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </x-ui.table>
+                    </details>
+                </div>
             </div>
-        </x-ui.card>
 
-        @if ($isAdmin)
-            <x-ui.card title="Menunggu verifikasi">
-                <x-slot:actions>
-                    <x-ui.button variant="ghost" size="sm" :href="route('verifications.index')">Lihat semua</x-ui.button>
-                </x-slot:actions>
-                <p class="text-3xl font-semibold tabular-nums text-ink">{{ $pendingCount }}</p>
-                <p class="text-sm text-muted">data dosen perlu diperiksa</p>
-                @if ($pending->isNotEmpty())
-                    <ul class="mt-4 divide-y divide-line border-t border-line">
-                        @foreach ($pending->take(4) as $item)
-                            <li class="py-2.5">
-                                <a href="{{ $item['url'] }}" class="line-clamp-1 text-sm font-medium text-ink underline-offset-4 hover:underline">{{ $item['title'] }}</a>
-                                <p class="text-xs text-muted">{{ $item['module'] }} · {{ $item['year'] }}</p>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </x-ui.card>
-        @else
-            <x-ui.card title="Perlu revisi" description="Dikembalikan admin — perbaiki lalu ajukan ulang.">
-                @if ($needsRevision->isEmpty())
-                    <p class="text-sm text-muted">Tidak ada data yang perlu direvisi.</p>
-                @else
-                    <ul class="divide-y divide-line">
-                        @foreach ($needsRevision as $item)
-                            <li class="py-2.5 first:pt-0 last:pb-0">
-                                <a href="{{ $item['url'] }}" class="line-clamp-2 text-sm font-medium text-ink underline-offset-4 hover:underline">{{ $item['title'] }}</a>
-                                <p class="text-xs text-muted">{{ $item['module'] }} · {{ $item['year'] }}</p>
-                                @if ($item['note'])
-                                    <p class="mt-1 line-clamp-2 text-xs text-warning-ink">{{ $item['note'] }}</p>
-                                @endif
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </x-ui.card>
-        @endif
+            {{-- 2 Sub-charts in a Grid --}}
+            <div class="grid gap-4 sm:grid-cols-2">
+                {{-- Komposisi per Modul --}}
+                <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+                    <div class="bg-[#7a0d0d] px-4 py-2.5 text-white">
+                        <h3 class="text-xs font-bold uppercase tracking-wider">Komposisi per Modul</h3>
+                    </div>
+                    <div class="p-4">
+                        @if (array_sum($composition['data']) > 0)
+                            <div x-data="donutChart(@js($composition))" class="h-56">
+                                <canvas x-ref="canvas" role="img" aria-label="Grafik komposisi data terverifikasi"></canvas>
+                            </div>
+                        @else
+                            <p class="flex h-56 items-center justify-center text-xs text-muted">Belum ada data terverifikasi.</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Status Data per Modul --}}
+                <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+                    <div class="bg-[#7a0d0d] px-4 py-2.5 text-white">
+                        <h3 class="text-xs font-bold uppercase tracking-wider">Status Data per Modul</h3>
+                    </div>
+                    <div class="p-4">
+                        <div x-data="barChart({ ...@js($statusChart), stacked: true, horizontal: true })" class="h-56">
+                            <canvas x-ref="canvas" role="img" aria-label="Grafik status data per modul"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {{-- Numbers per module --}}
+    {{-- Numbers per module (5 KPI Tiles) --}}
     <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
         @foreach ($modules as $module)
             <x-ui.stat-card :label="$module['label'].' '.$year" :value="$module['verified_this_year']"
@@ -204,11 +243,16 @@
         @endforeach
     </div>
 
+    {{-- Rekap per Fakultas Data Table --}}
     @if ($isAdmin)
-        <x-ui.card title="Rekap per fakultas" description="Data terverifikasi; satu data dihitung di setiap fakultas anggotanya." flush>
-            <x-slot:actions>
-                <x-ui.button variant="ghost" size="sm" :href="route('reports.index')">Rekap per dosen</x-ui.button>
-            </x-slot:actions>
+        <div class="overflow-hidden rounded-xl border border-line bg-surface shadow-xs">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-canvas/40 px-5 py-3.5">
+                <div>
+                    <h2 class="text-sm font-bold text-ink">Rekap Capaian per Fakultas</h2>
+                    <p class="text-xs text-muted">Data terverifikasi; satu data dihitung di setiap fakultas anggotanya</p>
+                </div>
+                <x-ui.button variant="secondary" size="sm" :href="route('reports.index')" icon="heroicon-o-table-cells">Rekap per Dosen</x-ui.button>
+            </div>
             <x-ui.table>
                 <x-slot:head>
                     <tr>
@@ -220,18 +264,18 @@
                     </tr>
                 </x-slot:head>
                 @forelse ($facultyRecap as $row)
-                    <tr>
+                    <tr class="transition hover:bg-slate-50/70">
                         <td class="font-medium text-ink">{{ $row['name'] }}</td>
                         @foreach ($row['counts'] as $count)
-                            <td class="text-right tabular-nums {{ $count ? 'text-ink' : 'text-muted' }}">{{ $count }}</td>
+                            <td class="text-right tabular-nums {{ $count ? 'text-ink font-medium' : 'text-muted' }}">{{ $count }}</td>
                         @endforeach
-                        <td class="text-right font-semibold tabular-nums text-ink">{{ $row['total'] }}</td>
+                        <td class="text-right font-bold tabular-nums text-brand-700">{{ $row['total'] }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="{{ count($modules) + 2 }}" class="text-center text-muted">Belum ada fakultas.</td></tr>
+                    <tr><td colspan="{{ count($modules) + 2 }}" class="text-center text-muted py-6">Belum ada fakultas.</td></tr>
                 @endforelse
             </x-ui.table>
-        </x-ui.card>
+        </div>
     @else
         <div class="grid gap-4 lg:grid-cols-2">
             <x-ui.card title="Draf belum diajukan" description="Lengkapi dokumen lalu ajukan verifikasi.">
