@@ -22,7 +22,7 @@ class MasterDataSeeder extends Seeder
         $faculties = [
             ['Fakultas Ilmu Kesehatan', 'FIKES', [
                 [StudyProgramLevel::S1, 'Keperawatan'],
-                [StudyProgramLevel::Profesi, 'Ners'],
+                [StudyProgramLevel::Profesi, 'Profesi Ners'],
                 [StudyProgramLevel::D3, 'Kebidanan'],
             ]],
             ['Fakultas Farmasi', 'FF', [
@@ -34,6 +34,9 @@ class MasterDataSeeder extends Seeder
                 [StudyProgramLevel::S1, 'Administrasi Rumah Sakit'],
             ]],
         ];
+
+        // Migrate any legacy 'Ners' record to 'Profesi Ners'
+        StudyProgram::where('name', 'Ners')->where('level', StudyProgramLevel::Profesi)->update(['name' => 'Profesi Ners']);
 
         foreach ($faculties as [$name, $code, $programs]) {
             $faculty = Faculty::firstOrCreate(['name' => $name], ['code' => $code, 'is_active' => true]);

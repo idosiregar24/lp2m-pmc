@@ -40,7 +40,7 @@ class StudyProgram extends Model
 
     public function displayName(): string
     {
-        return "{$this->level->label()} {$this->name}";
+        return $this->name;
     }
 
     /**

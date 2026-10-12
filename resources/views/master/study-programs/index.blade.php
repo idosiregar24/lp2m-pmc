@@ -18,16 +18,17 @@
         @else
             <x-ui.table>
                 <x-slot:head>
-                    <tr><th>Prodi</th><th>Fakultas</th><th>Pengguna</th><th>Status</th><th class="text-right"><span class="sr-only">Aksi</span></th></tr>
+                    <tr><th>Prodi</th><th>Jenjang</th><th>Fakultas</th><th>Pengguna</th><th>Status</th><th class="text-right"><span class="sr-only">Aksi</span></th></tr>
                 </x-slot:head>
                 @foreach ($studyPrograms as $studyProgram)
                     <tr>
-                        <td class="font-medium">{{ $studyProgram->displayName() }}</td>
+                        <td class="font-medium text-ink">{{ $studyProgram->name }}</td>
+                        <td><span class="inline-flex items-center rounded-md border border-line bg-canvas px-2 py-0.5 text-xs font-semibold text-slate-700">{{ $studyProgram->level->label() }}</span></td>
                         <td class="text-muted">{{ $studyProgram->faculty->name }}</td>
                         <td class="tabular-nums text-muted">{{ $studyProgram->users_count }}</td>
                         <td><x-ui.badge :tone="$studyProgram->is_active ? 'success' : 'neutral'">{{ $studyProgram->is_active ? 'Aktif' : 'Nonaktif' }}</x-ui.badge></td>
                         <td class="text-right">
-                            @include('master._row-actions', ['editUrl' => route('master.study-programs.edit', $studyProgram), 'deleteUrl' => route('master.study-programs.destroy', $studyProgram), 'name' => $studyProgram->displayName()])
+                            @include('master._row-actions', ['editUrl' => route('master.study-programs.edit', $studyProgram), 'deleteUrl' => route('master.study-programs.destroy', $studyProgram), 'name' => $studyProgram->name])
                         </td>
                     </tr>
                 @endforeach
